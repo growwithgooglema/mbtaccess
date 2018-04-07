@@ -8,6 +8,7 @@
   - [Google](#google)
 - [Application](#application)
   - [Build application using both Google Geocoding and MBTA API's](#build-application-using-both-google-geocoding-and-mbta-apis)
+  - [Meetup 20180407](#meetup-20180407)
   - [Future feature ideas](#future-feature-ideas)
 
 ## APIs
@@ -181,6 +182,52 @@ console.log(mit);
 ```
 
 We can discuss all these things tomorrow.
+
+### Meetup 20180407
+
+#### Details
+
+- We met up at MIT. Abdou had booked Building 38, room 166, but there was a classroom of kids there doing math. We moved to Building 1 room 134, then up to Abdou's office in Building 11 room 268.
+- Brendon proposed the basic front-end design of the app.
+  - Import Bootstrap for styling
+  - Navbar at top
+  - Large center container with map and search field
+  - Map pins with popups that read JSON data to return number of stops nearby, with and without wheelchair accessibility.
+  - He based the design on the Neighborhood Map project he is about to do for the Udacity Full Stack Web Developer Nanodegree program. Konrad Schieban has completed the program, and [his project](https://konradschieban.github.io/) was a helpful starting point for us.
+  - Brendon DM'ed Konrad on Slack with info on the project.
+- Abdou wrote some Python and JavaScript code ahead of time, and suggested ways that we could use JSON data for our app.
+- Brendon and Abdou agreed on code formatting guidelines.
+- Jennifer is planning to do some design work in Adobe Creative Suite, to provide graphics for the app. She will also work on the front-end.
+- Serene shared some JavaScript for interfacing with the Google Maps API.
+- Josh and Becca also came by and contributed.
+- We're hoping to make some more progress in the next few days. Abdou and Josh will work on the map coordinates, Jennifer will work on design, and Brendon will provide input on all aspects as "Benevolent Dictator."
+
+#### Slack message
+
+<img src="static/img/gwg-meetup-20180407-mit.jpg" alt="Udacity Grow with Google Meetup on April 7 2018 at MIT" width="75%">
+
+Remember how I said we should start a project? Well we did! The #massachusetts crew had a great meetup again today at MIT. We’re working on a **web app that integrates Google Maps and MBTA** (public transportation) data.
+
+Contributors:
+
+- @AbdouSeck
+  - **Chief Data Wrangler**
+  - **Friendly DevOps**
+  - **Location Services**
+- @br3ndonland
+  - **Nominated Benevolent Dictator**
+  - **Dr. Documentation**
+  - **Master of Markdown**
+- @jethridge13
+  - **Cartesian Contributor**
+  - **Interstate Transportation Logistics**
+- @noirfatale
+  - **Design Maven**
+  - **People Ops**
+- @sereneliu
+  - **Front-End Ninja**
+
+We’re just working out the beginnings on a dev branch right now, but **star the [repo](https://github.com/growwithgooglema/gwg-mbta)!** Feel free to submit suggestions in the future with pull requests or issues on GitHub! And as always, Stay Udacious!
 
 ---
 
