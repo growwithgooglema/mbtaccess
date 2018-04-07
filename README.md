@@ -20,12 +20,24 @@ We are developing on the `dev` branch.
 
 ## Instructions
 
-Please review the instructions in [projects/CONTRIBUTING.md](https://github.com/growwithgooglema/projects/blob/master/CONTRIBUTING.md).
+Please review the instructions in the [CONTRIBUTING.md](https://github.com/growwithgooglema/projects/blob/master/CONTRIBUTING.md) file for our organization.
 
 ## Contributors
 
-@br3ndonland: **Nominated Benevolent Dictator, Dr. Documentation, Master of Markdown**
-@AbdouSeck: **Chief Data Wrangler, Friendly DevOps, Location Services**
-@noirfatale: **Design Maven, People Ops**
-@sereneliu: **Front-End Ninja**
-@jethridge13: **Cartesian Contributor, Interstate Transportation Logistics**
+- @AbdouSeck
+  - **Chief Data Wrangler**
+  - **Friendly DevOps**
+  - **Location Services**
+- @br3ndonland
+  - **Nominated Benevolent Dictator**
+  - **Dr. Documentation**
+  - **Master of Markdown**
+- @jethridge13
+  - **Cartesian Contributor**
+  - **Interstate Transportation Logistics**
+- @noirfatale
+  - **Design Maven**
+  - **Div dabbling**
+  - **People Ops**
+- @sereneliu
+  - **Front-End Ninja**
