@@ -99,3 +99,11 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Mac
+.DS_Store
+
+# VS Code
+.vscode
+.vscode/*
+.vscode/settings.json
