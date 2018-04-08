@@ -20,7 +20,7 @@ We are developing on the `dev` branch.
 
 ## Instructions
 
-Please review the instructions in [projects/CONTRIBUTING.md](https://github.com/growwithgooglema/projects/blob/master/CONTRIBUTING.md).
+Please review the instructions in the [CONTRIBUTING.md](https://github.com/growwithgooglema/projects/blob/master/CONTRIBUTING.md) file for our organization.
 
 ## Contributors
 
@@ -37,6 +37,7 @@ Please review the instructions in [projects/CONTRIBUTING.md](https://github.com/
   - **Interstate Transportation Logistics**
 - @noirfatale
   - **Design Maven**
+  - **Div dabbling**
   - **People Ops**
 - @sereneliu
   - **Front-End Ninja**
