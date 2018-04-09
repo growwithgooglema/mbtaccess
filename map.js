@@ -3,14 +3,12 @@ This is the fun part. Here's where we generate the custom Google Map for the web
 See the documentation below for more details.
 https://developers.google.com/maps/documentation/javascript/reference
 */
-var map;    // declares a global map variable
-
+var map; // declares a global map variable
 
 /*
 Start here! initializeMap() is called when page is loaded.
 */
-function initializeMap() {
-
+function initializeMap () {
   var locations;
 
   var mapOptions = {
@@ -23,13 +21,11 @@ function initializeMap() {
   */
   map = new google.maps.Map(document.querySelector('#map'), mapOptions);
 
-
   /*
   locationFinder() returns an array of every location string from the JSONs
   written for bio, education, and work.
   */
-  function locationFinder() {
-
+  function locationFinder () {
     // initializes an empty array
     var locations = [];
 
@@ -40,7 +36,7 @@ function initializeMap() {
     // the locations array. Note that forEach is used for array iteration
     // as described in the Udacity FEND Style Guide:
     // https://udacity.github.io/frontend-nanodegree-styleguide/javascript.html#for-in-loop
-    education.schools.forEach(function(school){
+    education.schools.forEach(function (school) {
       locations.push(school.location);
     });
 
@@ -48,7 +44,7 @@ function initializeMap() {
     // the locations array. Note that forEach is used for array iteration
     // as described in the Udacity FEND Style Guide:
     // https://udacity.github.io/frontend-nanodegree-styleguide/javascript.html#for-in-loop
-    work.jobs.forEach(function(job){
+    work.jobs.forEach(function (job) {
       locations.push(job.location);
     });
 
@@ -60,13 +56,12 @@ function initializeMap() {
   placeData is the object returned from search results containing information
   about a single location.
   */
-  function createMapMarker(placeData) {
-
+  function createMapMarker (placeData) {
     // The next lines save location data from the search result object to local variables
-    var lat = placeData.geometry.location.lat();  // latitude from the place service
-    var lon = placeData.geometry.location.lng();  // longitude from the place service
-    var name = placeData.formatted_address;   // name of the place from the place service
-    var bounds = window.mapBounds;            // current boundaries of the map window
+    var lat = placeData.geometry.location.lat(); // latitude from the place service
+    var lon = placeData.geometry.location.lng(); // longitude from the place service
+    var name = placeData.formatted_address; // name of the place from the place service
+    var bounds = window.mapBounds; // current boundaries of the map window
 
     // marker is an object with additional data about the pin for a single location
     var marker = new google.maps.Marker({
@@ -83,7 +78,7 @@ function initializeMap() {
     });
 
     // hmmmm, I wonder what this is about...
-    google.maps.event.addListener(marker, 'click', function() {
+    google.maps.event.addListener(marker, 'click', function () {
       // your code goes here!
     });
 
@@ -100,7 +95,7 @@ function initializeMap() {
   callback(results, status) makes sure the search returned results for a location.
   If so, it creates a new map marker for that location.
   */
-  function callback(results, status) {
+  function callback (results, status) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
       createMapMarker(results[0]);
     }
@@ -110,14 +105,13 @@ function initializeMap() {
   pinPoster(locations) takes in the array of locations created by locationFinder()
   and fires off Google place searches for each location
   */
-  function pinPoster(locations) {
-
+  function pinPoster (locations) {
     // creates a Google place search service object. PlacesService does the work of
     // actually searching for location data.
     var service = new google.maps.places.PlacesService(map);
 
     // Iterates through the array of locations, creates a search object for each location
-      locations.forEach(function(place){
+    locations.forEach(function (place) {
       // the search request object
       var request = {
         query: place
@@ -138,7 +132,6 @@ function initializeMap() {
   // pinPoster(locations) creates pins on the map for each location in
   // the locations array
   pinPoster(locations);
-
 }
 
 /*
@@ -150,7 +143,7 @@ window.addEventListener('load', initializeMap);
 
 // Vanilla JS way to listen for resizing of the window
 // and adjust map bounds
-window.addEventListener('resize', function(e) {
-  //Make sure the map bounds get updated on page resize
+window.addEventListener('resize', function (e) {
+  // Make sure the map bounds get updated on page resize
   map.fitBounds(mapBounds);
 });

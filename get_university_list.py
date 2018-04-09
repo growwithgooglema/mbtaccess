@@ -29,4 +29,5 @@ def get_list(url):
 if __name__ == '__main__':
     article_url = (
         "https://en.wikipedia.org/wiki/List_of_colleges_and_universities_in_metropolitan_Boston")
-    print(get_list(article_url), file=open("universities.json", "w"))
+    # print(get_list(article_url), file=open("data/universities.json", "w"))
+    print(get_list(article_url))

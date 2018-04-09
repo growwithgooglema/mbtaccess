@@ -4,17 +4,17 @@ let https = require('https');
 // import https from 'https';
 const token = process.env.GMAPS_API;
 
-let universities = require('../../test_scripts/universities.json').map(school => {
+let universities = require('./data/universities.json').map(school => {
   return school.name;
 });
 
 class Place {
-  constructor ({name = null, street = null, placeID = null, lat = null, long = null} = {}) {
+  constructor ({name = null, street = null, placeID = null, lat = null, lng = null} = {}) {
     this.name = name;
     this.street = street;
     this.placeID = placeID;
     this.lat = lat;
-    this.long = long;
+    this.lng = lng;
   }
 
   getStreet () {
@@ -26,7 +26,7 @@ class Place {
   }
 
   getLong () {
-    return this.long;
+    return this.lng;
   }
 
   getPlaceID () {
@@ -42,7 +42,7 @@ class Place {
   }
 
   setLong (val) {
-    this.long = val;
+    this.lng = val;
   }
 
   setPlaceID (val) {
@@ -74,12 +74,12 @@ class Place {
 
   // Get the MBTA bus stops within a 1 mile radius
   getStops () {
-    // Point this call to an API with lat=this.lat&long=this.long&radius=1
+    // Point this call to an API with lat=this.lat&lng=this.lng&radius=1
     // To be implemented
   }
 
   toString () {
-    return `Name: ${this.name}\nStreet Address: ${this.street}\nLatitute: ${this.lat} N\nLongitude: ${this.long} W.`;
+    return `Name: ${this.name}\nStreet Address: ${this.street}\nLatitute: ${this.lat} N\nLongitude: ${this.lng} W.`;
   }
 }
 

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	 <title>Google Maps API - First Page</title>
+   <style>
+   html, body {
+    font-family: Arial, sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  #map {
+    height: 86%;
+    width: 60%;
+    margin: auto;
+  }
+  #searchbox {
+    width: 60%;
+    margin: auto;
+  }
+  #searchform {
+    width: 30%;
+    margin: auto;
+  }
+  li a {
+    display: inline;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  #searchbtn {
+    text-align: center;
+    margin: 0;
+  }
+  li a:hover {
+    background-color: #555;
+    color: white;
+  }
+   </style>
+  </head>
+  <body>
+    <header style="padding-bottom: 2%;">
+      <nav class="navbar">
+        <ul class="nav nav-tabs">
+          <li role="presentation" class="nav-item"><a class="nav-link active" href="javascript:void();">Interactive Map</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link" href="javascript:void();">University Ranking</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link" href="javascript:void();">About</a></li>
+        </ul>
+      </nav>
+    </header>
+    <article id="searchbox" style="padding-bottom: 2%; ">
+      <form id="searchform">
+        <fieldset>
+          <input id="searchtxt" type="text" class="form-control" style="text-align: center;" placeholder="Enter place name"><br>
+          <button id="searchbtn" class="btn btn-primary form-control">Search</button>
+        </fieldset>
+      </form>
+    </article>
+    <div id="map">
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var map;
+      var markers = [];
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: 42.360091, lng: -71.09416},
+          zoom: 13
+        });
+        var bounds = new google.maps.LatLngBounds();
+        function makeMarker(place) {
+          var largeInfowindow = new google.maps.InfoWindow();
+          var lat = place.geometry.location.lat();  // latitude from the place service
+          var lng = place.geometry.location.lng();  // longitude from the place service
+          var name = place.formatted_address;   // name of the place from the place service
+          var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location,
+            title: name,
+            animation: google.maps.Animation.DROP
+          });
+          markers.push(marker);
+          bounds.extend(new google.maps.LatLng(lat, lng));
+          marker.addListener('click', function() {
+            populateInfoWindow(this, largeInfowindow);
+          });
+          // map.setCenter(bounds.getCenter());
+          map.setCenter(new google.maps.LatLng(lat, lng));
+        }
+        function callback(results, status) {
+          // console.log(results[0])
+          if (status == google.maps.places.PlacesServiceStatus.OK) {
+            makeMarker(results[0]);
+          }
+        }
+        function pinPlace(searchText) {
+          var service = new google.maps.places.PlacesService(map);
+          var request = {
+            query: searchText.toLowerCase()
+          };
+          service.textSearch(request, callback);
+        }
+        function populateInfoWindow(marker, infowindow) {
+          if (infowindow.marker != marker) {
+            infowindow.marker = marker;
+            infowindow.setContent(`<div>${marker.title}</div>`);
+            infowindow.open(map, marker);
+            infowindow.addListener('closeclick', function() {
+              infowindow.setMarker = null;
+            });
+          }
+        }
+        function hideMarkers() {
+          for (let i=0; i<markers.length; i++) {
+            markers[i].setMap(null);
+          }
+        }
+        document.querySelector("form").addEventListener('submit', function(event) {
+          event.preventDefault();
+          hideMarkers();
+          map.setZoom(13);
+          var searchText = document.querySelector("#searchtxt").value;
+          if (searchText === "" || !searchText) {
+            alert("Cannot submit form with empty search text.");
+            return;
+          }
+          pinPlace(searchText);
+        });
+        map.fitBounds(bounds);
+      }
+      // Initialize tooltip component
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+      })
+      // Initialize popover component
+      $(function () {
+        $('[data-toggle="popover"]').popover()
+      })
+      $('a.nav-link').on('click', function() {
+        var link = $(this);
+        $('a.nav-link.active').removeClass('active');
+        $(link).addClass('active');
+      });
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ&libraries=places&callback=initMap">
+    </script>
+  </body>
+</html>
