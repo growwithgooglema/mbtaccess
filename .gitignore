@@ -107,3 +107,6 @@ ENV/
 .vscode
 .vscode/*
 .vscode/settings.json
+
+# Node Modules
+node_modules/
