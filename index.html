@@ -12,7 +12,7 @@
     padding: 0;
   }
   #map {
-    height: 86%;
+    height: 90%;
     width: 60%;
     margin: auto;
   }
@@ -44,9 +44,9 @@
     <header style="padding-bottom: 2%;">
       <nav class="navbar">
         <ul class="nav nav-tabs">
-          <li role="presentation" class="nav-item"><a class="nav-link active" href="javascript:void();">Interactive Map</a></li>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="javascript:void();">University Ranking</a></li>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="javascript:void();">About</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link active" href="javascript:void(0);">Interactive Map</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link" href="javascript:void(0);">University Ranking</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link" href="javascript:void(0);">About</a></li>
         </ul>
       </nav>
     </header>
@@ -60,6 +60,35 @@
     </article>
     <div id="map">
     </div>
+    <footer class="page-footer font-small indigo pt-0">
+      <!-- <div class="container">
+        <div class="row">
+          <div class="col-md-10 py-5 text-center">
+            <div class="mb-5 flex-center">
+              <a class="fb-ic" href="javascript:void(0);">
+                <i class="fa fa-facebook fa-lg white-text mr-md-5 mr-3 fa-2x">Facebook</i>
+              </a>
+              <a class="tw-ic" href="javascript:void(0);">
+                <i class="fa fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x">Twitter</i>
+              </a>
+              <a class="gplus-ic" href="javascript:void(0);">
+                <i class="fa fa-google-plus fa-lg white-text mr-md-5 mr-3 fa-2x">Google+</i>
+              </a>
+              <a class="li-ic" href="javascript:void(0);">
+                <i class="fa fa-linkedin fa-lg white-text mr-md-5 mr-3 fa-2x">LinkedIn</i>
+              </a>
+              <a class="ins-ic" href="javascript:void(0);">
+                <i class="fa fa-instagram fa-lg white-text mr-md-5 mr-3 fa-2x">Instagram</i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="footer-copyright py-3 text-center">
+          <span id="copyright"></span>
+          <a href="https://github.com/growwithgooglema">Grow with Google - New England</a>
+      </div>
+    </footer>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -71,6 +100,7 @@
           center: {lat: 42.360091, lng: -71.09416},
           zoom: 13
         });
+        map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
         var bounds = new google.maps.LatLngBounds();
         function makeMarker(place) {
           var largeInfowindow = new google.maps.InfoWindow();
@@ -145,6 +175,8 @@
         $('a.nav-link.active').removeClass('active');
         $(link).addClass('active');
       });
+      var currentYear = new Date().getFullYear();
+      $("#copyright").html(` © ${currentYear} Copyright:`);
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ&libraries=places&callback=initMap">
     </script>
