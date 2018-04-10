@@ -150,6 +150,10 @@
               largeInfowindow.marker = marker;
               largeInfowindow.setContent(newTitle);
               largeInfowindow.open(map, marker);
+            } else {
+              largeInfowindow.setContent(newTitle);
+              largeInfowindow.open(map, marker);
+              currentlyOpened = true;
             }
           }
         }).catch(function(error) {
