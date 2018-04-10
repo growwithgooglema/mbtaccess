@@ -11,7 +11,10 @@ var staticScripts = [
   "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
   "https://api-v3.mbta.com/stops",
   "index.html",
-  "index.js"
+  "static/js/index.js",
+  "static/js/dbCaching.js",
+  "static/js/localforage.min.js",
+  "static/js/utilities.js"
 ];
 
 self.addEventListener('fetch', function(event) {
