@@ -18,8 +18,9 @@ var staticScripts = [
 ];
 
 self.addEventListener('fetch', function(event) {
-  if (!event.request.url.includes('maps') && !event.request.url.includes(key)) {
-    console.log(event.request.url);
+  var responseCaches = !event.request.url.includes('maps') && !event.request.url.includes(key) && !event.request.url.includes('fonts.googleapis');
+  if (responseCaches) {
+    // console.log(event.request.url);
     event.respondWith(caches.open(cacheName).then(function(cache) {
       return cache.match(event.request).then(function(response) {
         if (response) {

@@ -70,6 +70,7 @@
     </div>
   </footer>
   <script type="text/javascript" src="static/js/index.js"></script>
+  <script type="text/javascript" src="static/js/utilities.js"></script>
   <script type="text/javascript" src="static/js/localforage.min.js"></script>
   <script type="text/javascript" src="static/js/dbCaching.js"></script>
   <!-- Bootstrap core JavaScript -->
@@ -82,6 +83,8 @@
   <script type="text/javascript">
     var map;
     var markers = [];
+    var infoClosed = false;
+    var currentlyOpened = false;
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
         center: new google.maps.LatLng(42.360091,-71.09416),
@@ -90,23 +93,61 @@
       // map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
       var bounds = new google.maps.LatLngBounds();
       function makeMarker(place) {
+        // console.log(place);
+        // 1 mile is 1.609344 kilometers
         var largeInfowindow = new google.maps.InfoWindow();
         var lat = place.geometry.location.lat();  // latitude from the place service
         var lng = place.geometry.location.lng();  // longitude from the place service
-        var name = place.formatted_address;   // name of the place from the place service
+        var address = place.formatted_address;   // name of the place from the place service
+        var name = place.name;
+        var stopCounter = 0;
+        var wheelchairCounter = 0;
         var marker = new google.maps.Marker({
           map: map,
           position: place.geometry.location,
-          title: name,
+          title: `<p>${name}</p><p>${address}</p><p>MBTA stops information currently being processed. Check again by closing this and reopening it.</p>`,
           animation: google.maps.Animation.DROP
         });
         markers.push(marker);
         bounds.extend(new google.maps.LatLng(lat, lng));
         marker.addListener('click', function() {
-          populateInfoWindow(this, largeInfowindow);
+          if (infoClosed) {
+            largeInfowindow.setContent(`<div>${marker.title}</div>`);
+            largeInfowindow.open(map, marker);
+            currentlyOpened = true;
+          } else {
+            populateInfoWindow(this, largeInfowindow);
+          }
         });
-        // map.setCenter(bounds.getCenter());
         map.setCenter(new google.maps.LatLng(lat, lng));
+        // Use localforage to iterate through the cached MBTA stops data
+        // For each stops, check that it's within a mile of the marker's geo info
+        // If so, increment our main counter by 1
+        // If also it's wheelchair access, increment the wheelchair counter by 1
+        localforage.iterate(function(value, key, IterNumber) {
+          var p1 = {lat: lat, lon: lng};
+          var p2 = {lat: value.lat, lon: value.lng};
+          if (getDistanceBetweenTwoPoints(p1, p2) <= 1.609344) {
+            stopCounter += 1;
+            if (value.wheelchair_boarding > 0) {
+              wheelchairCounter += 1;
+            }
+          }
+        }).then(function() {
+          // console.log("Done iterating");
+          marker.setTitle(`<p>${name}</p><p>${address}</p><p>${stopCounter} total stops</p><p>${wheelchairCounter} with wheelchair boarding access.</p>`);
+          if (infoClosed) {
+            largeInfowindow.open(map, marker);
+            currentlyOpened = true;
+          } else {
+            if (currentlyOpened) {
+              largeInfowindow.setMarker = null;
+              largeInfowindow.open(map, marker);
+            }
+          }
+        }).catch(function(error) {
+          console.log(error);
+        });
       }
       function callback(results, status) {
         // console.log(results[0])
@@ -131,6 +172,7 @@
           infowindow.open(map, marker);
           infowindow.addListener('closeclick', function() {
             infowindow.setMarker = null;
+            infoClosed = true;
           });
         }
       }
