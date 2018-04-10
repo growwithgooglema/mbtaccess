@@ -155,8 +155,9 @@
       $('a.nav-link.active').removeClass('active');
       $(link).addClass('active');
     });
+    // Calculate current year for footer
     var currentYear = new Date().getFullYear();
-    $("#copyright").html(` © ${currentYear} Copyright:`);
+    $("#copyright").html(`&copy; ${currentYear}`);
   </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ&libraries=places&callback=initMap">
   </script>
