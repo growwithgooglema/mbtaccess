@@ -69,6 +69,9 @@
         </a>
     </div>
   </footer>
+  <script type="text/javascript" src="static/js/index.js"></script>
+  <script type="text/javascript" src="static/js/localforage.min.js"></script>
+  <script type="text/javascript" src="static/js/dbCaching.js"></script>
   <!-- Bootstrap core JavaScript -->
   <!-- Placed at the end of the document so the pages load faster -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -81,10 +84,10 @@
     var markers = [];
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: 42.360091, lng: -71.09416},
+        center: new google.maps.LatLng(42.360091,-71.09416),
         zoom: 13
       });
-      map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
+      // map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
       var bounds = new google.maps.LatLngBounds();
       function makeMarker(place) {
         var largeInfowindow = new google.maps.InfoWindow();
@@ -109,6 +112,9 @@
         // console.log(results[0])
         if (status == google.maps.places.PlacesServiceStatus.OK) {
           makeMarker(results[0]);
+        } else {
+          alert('Could not find any information about your search term.');
+          return;
         }
       }
       function pinPlace(searchText) {
