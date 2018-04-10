@@ -29,9 +29,9 @@ function getDistanceBetweenTwoPoints (pt1, pt2) {
 
   const a = Math.pow(Math.sin(deltaLat/2), 2) +
     Math.pow(Math.sin(deltaLon/2), 2) * 
-    Math.cos(lat1) * Math.cos(lat2)
+    Math.cos(lat1) * Math.cos(lat2);
 
-  const c = 2 * Math.asin(Math.sqrt(a)) * 100
+  const c = 2 * Math.asin(Math.sqrt(a)) * 100;
 
   const d = (R * c) / 100;
 
