@@ -42,4 +42,4 @@ function toRadians (n) {
   return (n * (Math.PI / 180));
 }
 
-module.exports = getDistanceBetweenTwoPoints;
+// module.exports = getDistanceBetweenTwoPoints;

@@ -1,191 +1,217 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	 <title>Google Maps API - First Page</title>
-   <style>
-   html, body {
-    font-family: Arial, sans-serif;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  #map {
-    height: 90%;
-    width: 60%;
-    margin: auto;
-  }
-  #searchbox {
-    width: 60%;
-    margin: auto;
-  }
-  #searchform {
-    width: 30%;
-    margin: auto;
-  }
-  li a {
-    display: inline;
-    color: #000;
-    padding: 8px 16px;
-    text-decoration: none;
-  }
-  #searchbtn {
-    text-align: center;
-    margin: 0;
-  }
-  li a:hover {
-    background-color: #555;
-    color: white;
-  }
-   </style>
-  </head>
-  <body>
-    <header style="padding-bottom: 2%;">
-      <nav class="navbar">
-        <ul class="nav nav-tabs">
-          <li role="presentation" class="nav-item"><a class="nav-link active" href="javascript:void(0);">Interactive Map</a></li>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="javascript:void(0);">University Ranking</a></li>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="javascript:void(0);">About</a></li>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>GWG MAps</title>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Roboto|Material+Icons">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="static/css/custom.css">
+  <!-- Favicon -->
+  <link rel="icon" href="static/img/ic_directions_white_24dp_1x.png">
+  <!-- For IE 9 and below. -->
+  <!-- [if IE]><link rel="shortcut icon" href="../static/img/favicon.ico"><![endif] -->
+</head>
+<body>
+  <!-- Header -->
+  <header class="container header">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary rounded-bottom">
+      <a class="navbar-brand h1 lead" href="#">
+        <i class="material-icons">directions</i>
+        GWG MAps
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="javascript:void(0);">Interactive Map</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);">University Ranking</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);">About</a>
+          </li>
         </ul>
-      </nav>
-    </header>
-    <article id="searchbox" style="padding-bottom: 2%; ">
-      <form id="searchform">
-        <fieldset>
-          <input id="searchtxt" type="text" class="form-control" style="text-align: center;" placeholder="Enter place name"><br>
-          <button id="searchbtn" class="btn btn-primary form-control">Search</button>
-        </fieldset>
-      </form>
-    </article>
-    <div id="map">
-    </div>
-    <footer class="page-footer font-small indigo pt-0">
-      <!-- <div class="container">
-        <div class="row">
-          <div class="col-md-10 py-5 text-center">
-            <div class="mb-5 flex-center">
-              <a class="fb-ic" href="javascript:void(0);">
-                <i class="fa fa-facebook fa-lg white-text mr-md-5 mr-3 fa-2x">Facebook</i>
-              </a>
-              <a class="tw-ic" href="javascript:void(0);">
-                <i class="fa fa-twitter fa-lg white-text mr-md-5 mr-3 fa-2x">Twitter</i>
-              </a>
-              <a class="gplus-ic" href="javascript:void(0);">
-                <i class="fa fa-google-plus fa-lg white-text mr-md-5 mr-3 fa-2x">Google+</i>
-              </a>
-              <a class="li-ic" href="javascript:void(0);">
-                <i class="fa fa-linkedin fa-lg white-text mr-md-5 mr-3 fa-2x">LinkedIn</i>
-              </a>
-              <a class="ins-ic" href="javascript:void(0);">
-                <i class="fa fa-instagram fa-lg white-text mr-md-5 mr-3 fa-2x">Instagram</i>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div> -->
-      <div class="footer-copyright py-3 text-center">
-          <span id="copyright"></span>
-          <a href="https://github.com/growwithgooglema">Grow with Google - New England</a>
       </div>
-    </footer>
-    <script type="text/javascript" src="static/js/index.js"></script>
-    <script type="text/javascript" src="static/js/localforage.min.js"></script>
-    <script type="text/javascript" src="static/js/dbCaching.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script type="text/javascript">
-      var map;
-      var markers = [];
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: new google.maps.LatLng(42.360091,-71.09416),
-          zoom: 13
-        });
-        // map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
-        var bounds = new google.maps.LatLngBounds();
-        function makeMarker(place) {
-          var largeInfowindow = new google.maps.InfoWindow();
-          var lat = place.geometry.location.lat();  // latitude from the place service
-          var lng = place.geometry.location.lng();  // longitude from the place service
-          var name = place.formatted_address;   // name of the place from the place service
-          var marker = new google.maps.Marker({
-            map: map,
-            position: place.geometry.location,
-            title: name,
-            animation: google.maps.Animation.DROP
-          });
-          markers.push(marker);
-          bounds.extend(new google.maps.LatLng(lat, lng));
-          marker.addListener('click', function() {
-            populateInfoWindow(this, largeInfowindow);
-          });
-          // map.setCenter(bounds.getCenter());
-          map.setCenter(new google.maps.LatLng(lat, lng));
-        }
-        function callback(results, status) {
-          // console.log(results[0])
-          if (status == google.maps.places.PlacesServiceStatus.OK) {
-            makeMarker(results[0]);
-          } else {
-            alert('Could not find any information about your search term.');
-            return;
-          }
-        }
-        function pinPlace(searchText) {
-          var service = new google.maps.places.PlacesService(map);
-          var request = {
-            query: searchText.toLowerCase()
-          };
-          service.textSearch(request, callback);
-        }
-        function populateInfoWindow(marker, infowindow) {
-          if (infowindow.marker != marker) {
-            infowindow.marker = marker;
-            infowindow.setContent(`<div>${marker.title}</div>`);
-            infowindow.open(map, marker);
-            infowindow.addListener('closeclick', function() {
-              infowindow.setMarker = null;
-            });
-          }
-        }
-        function hideMarkers() {
-          for (let i=0; i<markers.length; i++) {
-            markers[i].setMap(null);
-          }
-        }
-        document.querySelector("form").addEventListener('submit', function(event) {
-          event.preventDefault();
-          hideMarkers();
-          map.setZoom(13);
-          var searchText = document.querySelector("#searchtxt").value;
-          if (searchText === "" || !searchText) {
-            alert("Cannot submit form with empty search text.");
-            return;
-          }
-          pinPlace(searchText);
-        });
-        map.fitBounds(bounds);
-      }
-      // Initialize tooltip component
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-      })
-      // Initialize popover component
-      $(function () {
-        $('[data-toggle="popover"]').popover()
-      })
-      $('a.nav-link').on('click', function() {
-        var link = $(this);
-        $('a.nav-link.active').removeClass('active');
-        $(link).addClass('active');
+    </nav>
+  </header>
+  <!-- TODO: main should go here -->
+    <div class="container">
+      <!-- Search form -->
+      <div class="row p-1">
+        <div class="col-md-8">
+          <form class="form-inline" id="searchform">
+            <fieldset id="searchbox">
+              <input id="searchtxt" class="form-control" type="search" placeholder="Enter place name" aria-label="Search">
+              <button id="searchbtn" class="btn btn-primary my-1">Search</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Map -->
+    <div class="container" id="map"></div>
+  <!-- TODO: close main tag here -->
+  <!-- Footer -->
+  <footer class="container footer">
+    <hr class="border border-secondary rounded">
+    <div class="text-muted text-center pb-2">
+      <span class="footer-copyright" id="copyright"></span>
+        <a href="https://github.com/growwithgooglema">
+          Grow with Google - New England
+        </a>
+    </div>
+  </footer>
+  <script type="text/javascript" src="static/js/index.js"></script>
+  <script type="text/javascript" src="static/js/utilities.js"></script>
+  <script type="text/javascript" src="static/js/localforage.min.js"></script>
+  <script type="text/javascript" src="static/js/dbCaching.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <!-- Google Maps JavaScript -->
+  <script type="text/javascript">
+    var map;
+    var markers = [];
+    var infoClosed = false;
+    var currentlyOpened = false;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng(42.360091,-71.09416),
+        zoom: 13
       });
-      var currentYear = new Date().getFullYear();
-      $("#copyright").html(` &copy; ${currentYear} Copyright:`);
-    </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ&libraries=places&callback=initMap">
-    </script>
-  </body>
+      // map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
+      var bounds = new google.maps.LatLngBounds();
+      function makeMarker(place) {
+        // console.log(place);
+        // 1 mile is 1.609344 kilometers
+        var largeInfowindow = new google.maps.InfoWindow();
+        var lat = place.geometry.location.lat();  // latitude from the place service
+        var lng = place.geometry.location.lng();  // longitude from the place service
+        var address = place.formatted_address;   // name of the place from the place service
+        var name = place.name;
+        var stopCounter = 0;
+        var wheelchairCounter = 0;
+        var marker = new google.maps.Marker({
+          map: map,
+          position: place.geometry.location,
+          title: `<p>${name}</p><p>${address}</p><p>MBTA stops information currently being processed. Check again by closing this and reopening it.</p>`,
+          animation: google.maps.Animation.DROP
+        });
+        markers.push(marker);
+        bounds.extend(new google.maps.LatLng(lat, lng));
+        marker.addListener('click', function() {
+          if (infoClosed) {
+            largeInfowindow.setContent(`<div>${marker.title}</div>`);
+            largeInfowindow.open(map, marker);
+            currentlyOpened = true;
+          } else {
+            populateInfoWindow(this, largeInfowindow);
+          }
+        });
+        map.setCenter(new google.maps.LatLng(lat, lng));
+        // Use localforage to iterate through the cached MBTA stops data
+        // For each stops, check that it's within a mile of the marker's geo info
+        // If so, increment our main counter by 1
+        // If also it's wheelchair access, increment the wheelchair counter by 1
+        localforage.iterate(function(value, key, IterNumber) {
+          var p1 = {lat: lat, lon: lng};
+          var p2 = {lat: value.lat, lon: value.lng};
+          if (getDistanceBetweenTwoPoints(p1, p2) <= 1.609344) {
+            stopCounter += 1;
+            if (value.wheelchair_boarding > 0) {
+              wheelchairCounter += 1;
+            }
+          }
+        }).then(function() {
+          // console.log("Done iterating");
+          marker.setTitle(`<p>${name}</p><p>${address}</p><p>${stopCounter} total stops</p><p>${wheelchairCounter} with wheelchair boarding access.</p>`);
+          if (infoClosed) {
+            largeInfowindow.open(map, marker);
+            currentlyOpened = true;
+          } else {
+            if (currentlyOpened) {
+              largeInfowindow.setMarker = null;
+              largeInfowindow.open(map, marker);
+            }
+          }
+        }).catch(function(error) {
+          console.log(error);
+        });
+      }
+      function callback(results, status) {
+        // console.log(results[0])
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          makeMarker(results[0]);
+        } else {
+          alert('Could not find any information about your search term.');
+          return;
+        }
+      }
+      function pinPlace(searchText) {
+        var service = new google.maps.places.PlacesService(map);
+        var request = {
+          query: searchText.toLowerCase()
+        };
+        service.textSearch(request, callback);
+      }
+      function populateInfoWindow(marker, infowindow) {
+        if (infowindow.marker != marker) {
+          infowindow.marker = marker;
+          infowindow.setContent(`<div>${marker.title}</div>`);
+          infowindow.open(map, marker);
+          infowindow.addListener('closeclick', function() {
+            infowindow.setMarker = null;
+            infoClosed = true;
+          });
+        }
+      }
+      function hideMarkers() {
+        for (let i=0; i<markers.length; i++) {
+          markers[i].setMap(null);
+        }
+      }
+      document.querySelector("form").addEventListener('submit', function(event) {
+        event.preventDefault();
+        hideMarkers();
+        map.setZoom(13);
+        var searchText = document.querySelector("#searchtxt").value;
+        if (searchText === "" || !searchText) {
+          alert("Cannot submit form with empty search text.");
+          return;
+        }
+        pinPlace(searchText);
+      });
+      map.fitBounds(bounds);
+    }
+    // Initialize tooltip component
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+    // Initialize popover component
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+    $('a.nav-link').on('click', function() {
+      var link = $(this);
+      $('a.nav-link.active').removeClass('active');
+      $(link).addClass('active');
+    });
+    // Calculate current year for footer
+    var currentYear = new Date().getFullYear();
+    $("#copyright").html(`&copy; ${currentYear}`);
+  </script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ&libraries=places&callback=initMap">
+  </script>
+</body>
 </html>

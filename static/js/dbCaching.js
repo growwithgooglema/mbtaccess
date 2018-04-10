@@ -19,7 +19,14 @@ fetch("https://api-v3.mbta.com/stops").then(function(response) {
   throw Error("Failed to fetch MBTA stops metadata");
 }).then(function(stops) {
   stops.data.forEach(function(mbtaStop) {
-    localforage.setItem(mbtaStop.id, mbtaStop).then(function(value) {
+    let place = {
+      id: mbtaStop.id,
+      name: mbtaStop.attributes.name,
+      lat: mbtaStop.attributes.latitude,
+      lng: mbtaStop.attributes.longitude,
+      wheelchair_boarding: mbtaStop.attributes.wheelchair_boarding
+    };
+    localforage.setItem(place.id, place).then(function(value) {
       // console.log(mbtaStop, " added to the DB.");
     }).catch(function(error) {
       console.log(error, " occured while being saved.");
