@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	 <title>Google Maps API - First Page</title>
@@ -89,6 +90,9 @@
           <a href="https://github.com/growwithgooglema">Grow with Google - New England</a>
       </div>
     </footer>
+    <script type="text/javascript" src="static/js/index.js"></script>
+    <script type="text/javascript" src="static/js/localforage.min.js"></script>
+    <script type="text/javascript" src="static/js/dbCaching.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -97,10 +101,10 @@
       var markers = [];
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: 42.360091, lng: -71.09416},
+          center: new google.maps.LatLng(42.360091,-71.09416),
           zoom: 13
         });
-        map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
+        // map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
         var bounds = new google.maps.LatLngBounds();
         function makeMarker(place) {
           var largeInfowindow = new google.maps.InfoWindow();
@@ -125,6 +129,9 @@
           // console.log(results[0])
           if (status == google.maps.places.PlacesServiceStatus.OK) {
             makeMarker(results[0]);
+          } else {
+            alert('Could not find any information about your search term.');
+            return;
           }
         }
         function pinPlace(searchText) {
@@ -176,7 +183,7 @@
         $(link).addClass('active');
       });
       var currentYear = new Date().getFullYear();
-      $("#copyright").html(` © ${currentYear} Copyright:`);
+      $("#copyright").html(` &copy; ${currentYear} Copyright:`);
     </script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ&libraries=places&callback=initMap">
     </script>
