@@ -38,19 +38,23 @@
       </div>
     </nav>
   </header>
-  <!-- Search form -->
-  <!-- Map -->
-  <!-- Footer -->
-  <article id="searchbox" style="padding-bottom: 2%; ">
-    <form id="searchform">
-      <fieldset>
-        <input id="searchtxt" type="text" class="form-control" style="text-align: center;" placeholder="Enter place name"><br>
-        <button id="searchbtn" class="btn btn-primary form-control">Search</button>
-      </fieldset>
-    </form>
-  </article>
-  <div id="map">
-  </div>
+  <!-- TODO: main should go here -->
+    <div class="container">
+      <!-- Search form -->
+      <div class="row p-1">
+        <div class="col-md-8">
+          <form class="form-inline" id="searchform">
+            <fieldset id="searchbox">
+              <input id="searchtxt" class="form-control" type="search" placeholder="Enter place name" aria-label="Search">
+              <button id="searchbtn" class="btn btn-primary my-1">Search</button>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Map -->
+    <div class="container" id="map"></div>
+  <!-- TODO: close main tag here -->
   <footer class="page-footer font-small indigo pt-0">
     <!-- <div class="container">
       <div class="row">
