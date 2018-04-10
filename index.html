@@ -105,7 +105,7 @@
         var marker = new google.maps.Marker({
           map: map,
           position: place.geometry.location,
-          title: `<p>${name}</p><p>${address}</p><p>MBTA stops information currently being processed. Check again by closing this and reopening it.</p>`,
+          title: `<p>${name}</p><p>${address}</p><p>MBTA stops information currently being processed. The card will refresh when the info is available.</p>`,
           animation: google.maps.Animation.DROP
         });
         markers.push(marker);
@@ -135,13 +135,20 @@
           }
         }).then(function() {
           // console.log("Done iterating");
-          marker.setTitle(`<p>${name}</p><p>${address}</p><p>${stopCounter} total stops</p><p>${wheelchairCounter} with wheelchair boarding access.</p>`);
+          var newTitle = `<p>${name}</p><p>${address}</p><p>${stopCounter} total stops</p><p>${wheelchairCounter} with wheelchair boarding access.</p>`;
+          marker.setTitle(newTitle);
+          largeInfowindow.marker = marker;
           if (infoClosed) {
+            // console.log('Inside the if statement: infowindow is closed.');
+            largeInfowindow.setContent(newTitle);
             largeInfowindow.open(map, marker);
             currentlyOpened = true;
           } else {
             if (currentlyOpened) {
+              // console.log('Made it to the else statement');
               largeInfowindow.setMarker = null;
+              largeInfowindow.marker = marker;
+              largeInfowindow.setContent(newTitle);
               largeInfowindow.open(map, marker);
             }
           }
@@ -170,9 +177,11 @@
           infowindow.marker = marker;
           infowindow.setContent(`<div>${marker.title}</div>`);
           infowindow.open(map, marker);
+          currentlyOpened = true;
           infowindow.addListener('closeclick', function() {
             infowindow.setMarker = null;
             infoClosed = true;
+            currentlyOpened = false;
           });
         }
       }
