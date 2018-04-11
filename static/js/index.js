@@ -1,6 +1,6 @@
 if (navigator.serviceWorker) {
   window.addEventListener("load", function() {
-    navigator.serviceWorker.register('sw.js', {scope: '/'}).then(function(reg) {
+    navigator.serviceWorker.register('sw.js').then(function(reg) {
       // If waiting, send message to service worker to skip waiting
       if (reg.waiting) {
         reg.waiting.postMessage({action: "skipWaiting"});
