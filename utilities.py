@@ -98,7 +98,7 @@ def process_schools(schools_data, url):
             for stop in stops:
                 attributes = stop.get('attributes')
                 p2 = {'lat': attributes.get('latitude'), 'lon': attributes.get('longitude')}
-                if get_distance(p1, p2) <= 1.609344:
+                if get_distance(p1, p2) <= (1.609344)/2.0:
                     school['stops'] += 1
                     if attributes.get('wheelchair_boarding') > 0:
                         school['wheelchairs'] += 1
