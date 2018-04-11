@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>GWG MAps</title>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- Google Fonts -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Roboto|Material+Icons">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="static/css/custom.css">
+  <!-- DataTables.js core CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <!-- Favicon -->
+  <link rel="icon" href="static/img/ic_directions_white_24dp_1x.png">
+  <!-- For IE 9 and below. -->
+  <!-- [if IE]><link rel="shortcut icon" href="static/img/favicon.ico"><![endif] -->
+</head>
+<body>
+  <!-- Header -->
+  <header class="container header" style="padding-bottom: 5%;">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary rounded-bottom">
+      <a class="navbar-brand h1 lead" href="/index.html">
+        <i class="material-icons">directions</i>
+        GWG MAps
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="/index.html">Interactive Map</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/universities.html">University Ranking</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);">About</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main style="padding-bottom: 5%;">
+    <article class="center">
+      <div>
+        <table id="universities" class="display" width="100%" style="padding-left: 0%;"></table>
+      </div>
+    </article>
+  </main>
+  <!-- TODO: close main tag here -->
+  <!-- Footer -->
+  <footer class="container footer">
+    <hr class="border border-secondary rounded">
+    <div class="text-muted text-center pb-2">
+      <span class="footer-copyright" id="copyright"></span>
+        <a href="https://github.com/growwithgooglema">
+          Grow with Google - New England
+        </a>
+    </div>
+  </footer>
+  <script type="text/javascript" src="static/js/index.js"></script>
+  <script type="text/javascript" src="static/js/utilities.js"></script>
+  <script type="text/javascript" src="static/js/localforage.min.js"></script>
+  <script type="text/javascript" src="static/js/dbCaching.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS, then DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <!-- Custom JQuery JavaScript -->
+  <script type="text/javascript">
+    // Initialize tooltip component
+    var schools = [];
+    uniStore.iterate(function(value, key, iterNumber) {
+      school = [
+        value.name,
+        value.address,
+        value.stops.toString(),
+        value.wheelchairs.toString(),
+        value.ratio.toFixed(2)
+      ];
+      schools.push(school);
+    }).then(function() {
+      console.log(schools);
+      $("#universities").DataTable({
+        data: schools,
+        columns: [
+          {title: "Name"},
+          {title: "Address"},
+          {title: "Stops"},
+          {title: "Wheelchair Access"},
+          {title: "Ratio"}
+        ]
+      });
+    });
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+    // Initialize popover component
+    $(function () {
+      $('[data-toggle="popover"]').popover()
+    })
+    $('a.nav-link').on('click', function() {
+      var link = $(this);
+      $('a.nav-link.active').removeClass('active');
+      $(link).addClass('active');
+    });
+    // Calculate current year for footer
+    var currentYear = new Date().getFullYear();
+    $("#copyright").html(`&copy; ${currentYear}`);
+  </script>
+</body>
+</html>

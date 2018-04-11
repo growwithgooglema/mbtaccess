@@ -8,3 +8,9 @@ html, body {
   height: 90%;
   margin: auto;
 }
+.center {
+  margin: auto;
+  width: 80%;
+  padding: 0px;
+  border: 0px;
+}

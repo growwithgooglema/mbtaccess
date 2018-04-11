@@ -4,7 +4,7 @@ let https = require('https');
 // import https from 'https';
 const token = process.env.GMAPS_API;
 
-let universities = require('./data/universities.json').map(school => {
+let universities = require('../../data/universities.json').map(school => {
   return school.name;
 });
 

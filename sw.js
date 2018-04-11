@@ -2,14 +2,17 @@
 // Cache static files and images
 // Cache GET and POST requests, especially API calls
 
-var cacheName = 'gwg-mbta-v1';
+var cacheName = 'gwg-mbta-v4';
 var key = "AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ";
 var staticScripts = [
   "https://code.jquery.com/jquery-3.2.1.slim.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js",
   "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js",
   "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
+  "https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css",
+  "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js",
   "https://api-v3.mbta.com/stops",
+  "data/cleaner_universities.json",
   "index.html",
   "static/js/index.js",
   "static/js/dbCaching.js",
@@ -18,7 +21,8 @@ var staticScripts = [
 ];
 
 self.addEventListener('fetch', function(event) {
-  var responseCaches = !event.request.url.includes('maps') && !event.request.url.includes(key) && !event.request.url.includes('fonts.googleapis');
+  var requestUrl = event.request.url;
+  var responseCaches = !requestUrl.includes('datatables') && !requestUrl.includes('maps') && !requestUrl.includes(key) && !requestUrl.includes('fonts.googleapis');
   if (responseCaches) {
     // console.log(event.request.url);
     event.respondWith(caches.open(cacheName).then(function(cache) {
