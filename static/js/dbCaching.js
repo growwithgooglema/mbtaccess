@@ -52,31 +52,31 @@ let uniStore = localforage.createInstance({
 //   description: 'Local indexedDB cache for local universities metadata'
 // });
 
-fetch('data/cleaner_universities.json').then(function(response) {
-  if (response.ok) {
-    return response.json();
-  }
-  throw Error("Failed to fetch Massachusetts universities data.");
-}).then(function(schools) {
-  schools.forEach(function(school) {
-    let place = {
-      name: school.name,
-      address: school.street,
-      lat: school.lat,
-      lng: school.lng,
-      stops: school.stops,
-      wheelchairs: school.wheelchairs,
-      ratio: school.ratio
-    };
-    uniStore.setItem(place.name, place).then(function(value) {
-      // console.log(value, ' added.');
-    }).catch(function(err) {
-      console.log(`Could not ${school.name} because ${err}.`);
-    });
-  });
-}).catch(function(err) {
-  console.log(`${err.message} occurred during DB processing.`);
-});
+// fetch('data/cleaner_universities.json').then(function(response) {
+//   if (response.ok) {
+//     return response.json();
+//   }
+//   throw Error("Failed to fetch Massachusetts universities data.");
+// }).then(function(schools) {
+//   schools.forEach(function(school) {
+//     let place = {
+//       name: school.name,
+//       address: school.street,
+//       lat: school.lat,
+//       lng: school.lng,
+//       stops: school.stops,
+//       wheelchairs: school.wheelchairs,
+//       ratio: school.ratio
+//     };
+//     uniStore.setItem(place.name, place).then(function(value) {
+//       // console.log(value, ' added.');
+//     }).catch(function(err) {
+//       console.log(`Could not ${school.name} because ${err}.`);
+//     });
+//   });
+// }).catch(function(err) {
+//   console.log(`${err.message} occurred during DB processing.`);
+// });
 
 // localforage.dropInstance({
 //   name: dbName,

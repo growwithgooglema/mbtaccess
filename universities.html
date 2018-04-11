@@ -47,7 +47,7 @@
   <main style="padding-bottom: 5%;">
     <article class="center">
       <div>
-        <table id="universities" class="display" width="100%" style="padding-left: 0%;"></table>
+        <table id="universities" class="display compact" width="100%" style="padding-left: 0%;"></table>
       </div>
     </article>
   </main>
@@ -77,27 +77,33 @@
   <script type="text/javascript">
     // Initialize tooltip component
     var schools = [];
-    uniStore.iterate(function(value, key, iterNumber) {
-      school = [
-        value.name,
-        value.address,
-        value.stops.toString(),
-        value.wheelchairs.toString(),
-        value.ratio.toFixed(2)
-      ];
-      schools.push(school);
-    }).then(function() {
-      console.log(schools);
+    fetch('data/cleaner_universities.json').then(function(response) {
+      if (response.ok) {
+        return response.json();
+      }
+      throw Error("Failed to fetch Massachusetts universities data.");
+    }).then(function(schools) {
       $("#universities").DataTable({
-        data: schools,
+        data: schools.map(function(school) {
+          return [
+            school.name,
+            school.street,
+            school.stops,
+            school.wheelchairs,
+            school.ratio.toFixed(2)
+          ];
+        }),
         columns: [
           {title: "Name"},
           {title: "Address"},
           {title: "Stops"},
           {title: "Wheelchair Access"},
           {title: "Ratio"}
-        ]
+        ],
+        responsive: true
       });
+    }).catch(function(err) {
+      console.log(`${err.message} occurred during DB processing.`);
     });
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()

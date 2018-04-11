@@ -2,7 +2,7 @@
 // Cache static files and images
 // Cache GET and POST requests, especially API calls
 
-var cacheName = 'gwg-mbta-v4';
+var cacheName = 'gwg-mbta-v7';
 var key = "AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ";
 var staticScripts = [
   "https://code.jquery.com/jquery-3.2.1.slim.min.js",

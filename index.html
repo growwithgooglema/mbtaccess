@@ -127,7 +127,7 @@
         localforage.iterate(function(value, key, IterNumber) {
           var p1 = {lat: lat, lon: lng};
           var p2 = {lat: value.lat, lon: value.lng};
-          if (getDistanceBetweenTwoPoints(p1, p2) <= 1.609344) {
+          if (getDistanceBetweenTwoPoints(p1, p2) <= (1.609344/2)) {
             stopCounter += 1;
             if (value.wheelchair_boarding > 0) {
               wheelchairCounter += 1;
@@ -135,7 +135,7 @@
           }
         }).then(function() {
           // console.log("Done iterating");
-          var newTitle = `<p>${name}</p><p>${address}</p><p>${stopCounter} total stops</p><p>${wheelchairCounter} with wheelchair boarding access.</p>`;
+          var newTitle = `<p>${name}</p><p>${address}</p><p>${stopCounter} total stops within a 0.5 mile radius</p><p>${wheelchairCounter} with wheelchair boarding access.</p>`;
           marker.setTitle(newTitle);
           largeInfowindow.marker = marker;
           if (infoClosed) {
