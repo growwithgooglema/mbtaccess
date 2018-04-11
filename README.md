@@ -36,6 +36,7 @@ Please review the instructions in the [CONTRIBUTING.md](https://github.com/groww
   - **Cartesian Contributor**
   - **Interstate Transportation Logistics**
 - @noirfatale
+  - **Front End programming**
   - **Design Maven**
   - **Div dabbling**
   - **People Ops**
