@@ -90,7 +90,7 @@
         center: new google.maps.LatLng(42.360091,-71.09416),
         zoom: 13
       });
-      // map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
+      map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
       var bounds = new google.maps.LatLngBounds();
       function makeMarker(place) {
         // console.log(place);
@@ -119,7 +119,7 @@
             populateInfoWindow(this, largeInfowindow);
           }
         });
-        map.setCenter(new google.maps.LatLng(lat, lng));
+        // map.setCenter(new google.maps.LatLng(lat, lng));
         // Use localforage to iterate through the cached MBTA stops data
         // For each stops, check that it's within a mile of the marker's geo info
         // If so, increment our main counter by 1
@@ -197,7 +197,7 @@
       document.querySelector("form").addEventListener('submit', function(event) {
         event.preventDefault();
         hideMarkers();
-        map.setZoom(13);
+        // map.setZoom(13);
         var searchText = document.querySelector("#searchtxt").value;
         if (searchText === "" || !searchText) {
           alert("Cannot submit form with empty search text.");
@@ -226,6 +226,14 @@
     $("#copyright").html(`&copy; ${currentYear}`);
   </script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ&libraries=places&callback=initMap">
+  </script>
+  <script>
+    document.onreadystatechange = function () {
+      if (document.readyState === "complete") {
+        map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
+        map.setZoom(15);
+      }
+    }
   </script>
 </body>
 </html>
