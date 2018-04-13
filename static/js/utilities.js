@@ -13,6 +13,13 @@ function getDistanceBetweenTwoPoints (pt1, pt2) {
    */
   //https://www.movable-type.co.uk/scripts/latlong.html
   //https://rosettacode.org/wiki/Haversine_formula#ES6
+  if (typeof(pt1.lat) == 'undefined' ||
+      typeof(pt1.lon) == 'undefined' ||
+      typeof(pt2.lat) == 'undefined' ||
+      typeof(pt2.lon) == 'undefined') {
+    throw new TypeError('One of the arguments is missing the lat or lon field');
+  }
+
   if (pt1 === pt2) {
     return 0;
   }
@@ -42,4 +49,37 @@ function toRadians (n) {
   return (n * (Math.PI / 180));
 }
 
-// module.exports = getDistanceBetweenTwoPoints;
+function getAllPointsInRadius (centerPt, pts, radius) {
+  /**
+   *  Gets a list of all points within a radius of a given point.
+   *
+   *  This function uses the getDistanceBetweenTwoPoints() method to 
+   *  retrieve a list of all points from a given list of points that
+   *  are within a given radius.
+   *
+   *  @param {map}  centerPt  The point from which all other points are compared
+   *  to determine if they are within the given raddius. Should have a lat and
+   *  lon attributes which have ints as values.
+   *  @param {array}  pts  An array of points formatted in the same manner as
+   *  the center point. These points are tested for distance to the center point.
+   *  Points within the given radius are returned.
+   *  @param {int}  radius  The distance (in km) from which all other points are
+   *  compared.
+   *
+   * @return  {array} A list which contains all the points from pts that are
+   *  within the radius from the centerPt.
+   */
+  ptsInRadius = [];
+  pts.forEach( function (element) {
+    if (getDistanceBetweenTwoPoints(centerPt, element) <= radius) {
+      ptsInRadius.push(element);
+    }
+  });
+  return ptsInRadius;
+}
+/*
+module.exports = {
+  getDistanceBetweenTwoPoints,
+  getAllPointsInRadius,
+};
+*/

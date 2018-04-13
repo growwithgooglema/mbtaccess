@@ -18,5 +18,8 @@
   "homepage": "https://github.com/growwithgooglema/gwg-mbta#readme",
   "devDependencies": {
     "jest": "^22.4.3"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
