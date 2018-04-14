@@ -119,7 +119,7 @@
             populateInfoWindow(this, largeInfowindow);
           }
         });
-        // map.setCenter(new google.maps.LatLng(lat, lng));
+        map.setCenter(new google.maps.LatLng(lat, lng));
         // Use localforage to iterate through the cached MBTA stops data
         // For each stops, check that it's within a mile of the marker's geo info
         // If so, increment our main counter by 1
