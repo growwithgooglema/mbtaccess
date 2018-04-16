@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="static/css/custom.css">
   <!-- DataTables.js core CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+  <!-- Responsive extension to DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css">
   <!-- Favicon -->
   <link rel="icon" href="static/img/ic_directions_white_24dp_1x.png">
   <!-- For IE 9 and below. -->
@@ -73,53 +75,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js"></script>
   <!-- Custom JQuery JavaScript -->
-  <script type="text/javascript">
-    // Initialize tooltip component
-    var schools = [];
-    fetch('data/cleaner_universities.json').then(function(response) {
-      if (response.ok) {
-        return response.json();
-      }
-      throw Error("Failed to fetch Massachusetts universities data.");
-    }).then(function(schools) {
-      $("#universities").DataTable({
-        data: schools.map(function(school) {
-          return [
-            school.name,
-            school.street,
-            school.stops,
-            school.wheelchairs,
-            school.ratio.toFixed(2)
-          ];
-        }),
-        columns: [
-          {title: "Name"},
-          {title: "Address"},
-          {title: "Stops"},
-          {title: "Wheelchair Access"},
-          {title: "Ratio"}
-        ],
-        responsive: true
-      });
-    }).catch(function(err) {
-      console.log(`${err.message} occurred during DB processing.`);
-    });
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
-    // Initialize popover component
-    $(function () {
-      $('[data-toggle="popover"]').popover()
-    })
-    $('a.nav-link').on('click', function() {
-      var link = $(this);
-      $('a.nav-link.active').removeClass('active');
-      $(link).addClass('active');
-    });
-    // Calculate current year for footer
-    var currentYear = new Date().getFullYear();
-    $("#copyright").html(`&copy; ${currentYear}`);
-  </script>
+  <script type="text/javascript" src="static/js/universities.js"></script>
 </body>
 </html>
