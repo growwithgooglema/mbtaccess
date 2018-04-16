@@ -27,10 +27,24 @@
 
 - [data/](data): Code for gathering application data.
 - [static/](static): CSS, image, and JavaScript files for the application.
-- [.gitignore](.gitignore): Instructions to Git, to ignore certain files in the local directory.
+  - [css/](static/css)
+    - [custom.css](static/css/custom.css): Custom CSS for the app, in addition to Bootstrap.
+  - [img/](static/img)
+  - [js/](static/js)
+    - [addratios.js](static/js/addratios.js)
+    - [dbCaching.js](static/js/dbCaching.js)
+    - [google-maps.js](static/js/google-maps.js)
+    - [index.js](static/js/index.js)
+    - [localforage.min.js](static/js/localforage.min.js)
+    - [map.js](static/js/map.js)
+    - [school.js](static/js/school.js)
+    - [utilities.js](static/js/utilities.js): Calculates distances in order to display stop information based on the location searched.
+    - [utilities.test.js](static/js/utilities.test.js)
+- [.gitignore](.gitignore): List of instructions that tell Git to ignore certain files in the directory.
 - [.jshintrc](.jshintrc)
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Guidelines for conduct.
 - [CONTRIBUTING.md](CONTRIBUTING.md): Instructions for contributing to the repository.
+- [Dockerfile](Dockerfile): Instructions for Docker container builds.
 - [get_university_list.py](get_university_list.py):
 - [index.html](index.html): The application homepage.
 - [LICENSE](LICENSE): This file describes how the repository can be used by others. We have provided the repository under the MIT license, a permissive and widely-used license. See the [choose a license page](https://choosealicense.com/) for more info on licenses.
@@ -98,7 +112,7 @@ If either of these two worked, head to [http://127.0.0.1:8000](http://127.0.0.1:
   - **Cloudmaster**
   - **The Dockerizer**
 - [@noirfatale](https://github.com/noirfatale)
-  - **Front End programming**
+  - **Front-End programming**
   - **Design Maven**
   - **People Ops**
 - [@sereneliu](https://github.com/sereneliu)

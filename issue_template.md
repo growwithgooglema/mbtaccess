@@ -12,3 +12,5 @@ import this
 ## Suggested behavior
 
 Describe suggested changes and their predicted outcomes.
+
+Reference issue numbers addressed by this pull request. Type `#` and the list of issues will appear.

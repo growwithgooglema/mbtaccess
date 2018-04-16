@@ -92,6 +92,14 @@ To initiate a collaborative project, please do the following:
 
 - **Make meaningful, cohesive, focused commits.** Commit when an objective has been completed, or before a major change is made. Break changes up into topics so the maintainer can easily accept or reject changes from a pull request.
 - **Include a commit message, with an imperative title.** See [How to make a Git commit message](https://chris.beams.io/posts/git-commit/).
+- If `dev` or topic branches are behind `master` in commits, it is useful to perform a merge into the branch, so that the branches stay in sync with the master.
+
+  ```text
+  git checkout master
+  git pull
+  git checkout dev
+  git merge master
+  ```
 
 ### Push
 
