@@ -33,6 +33,21 @@ test('1 degree away gives correct distance', () => {
   expect(result).toBeLessThan(105)
 });
 
+test('1 degree away gives correct distance in miles', () => {
+  const pt1 = {
+    lat: 20,
+    lon: 20,
+  }
+  const pt2 = {
+    lat: 20,
+    lon: 21,
+  }
+
+  const result = dis.getDistanceBetweenTwoPoints(pt1, pt2, 'm')
+  expect(result).toBeGreaterThan(62)
+  expect(result).toBeLessThan(65)
+});
+
 test('test example from https://rosettacode.org/wiki/Haversine_formula#ES6', () => {
   /* Use the example given from the aforementioned link on the Haversine forumla
   */
@@ -48,6 +63,21 @@ test('test example from https://rosettacode.org/wiki/Haversine_formula#ES6', () 
 
   expect(result).toBeGreaterThan(2887)
   expect(result).toBeLessThan(2888)
+});
+
+test('test example from previous url in miles', () => {
+  const pt1 = {
+    lat: 36.12,
+    lon: -86.67,
+  }
+  const pt2 = {
+    lat: 33.94,
+    lon: -118.40,
+  }
+  const result = dis.getDistanceBetweenTwoPoints(pt1, pt2, 'm')
+
+  expect(result).toBeGreaterThan(1793)
+  expect(result).toBeLessThan(1795)
 });
 
 test('calling getDistanceBetweenTwoPoints with faulty arguments throws error', () => {
@@ -101,6 +131,34 @@ test('two points in radius, one point out', () => {
   const radius = 110;
 
   const result = dis.getAllPointsInRadius(centerPt, pts, radius);
+
+  expect(result.length).toBe(2);
+});
+
+test('two points in radius, one point out in miles', () => {
+  const centerPt = {
+    lat: 20,
+    lon: 20,
+  }
+
+  const pts = [
+    {
+      lat: 20,
+      lon: 21,
+    },
+    {
+      lat: 20,
+      lon: 20,
+    },
+    {
+      lat: 0,
+      lon: 0,
+    }
+  ];
+
+  const radius = 110;
+
+  const result = dis.getAllPointsInRadius(centerPt, pts, radius, 'm');
 
   expect(result.length).toBe(2);
 });
