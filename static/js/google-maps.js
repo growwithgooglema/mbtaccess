@@ -1,18 +1,61 @@
 // Google maps code to generate a map and populate it with
 // info related to the end user's requested location
 
+// This is a very lazy way of creating a Place object
+var userLocation = {
+  name: 'Your Current Location',
+  formatted_address: '',
+  geometry: {
+    location: {
+      lat: function() {
+        return null;
+      },
+      lng: function() {
+        return null;
+      }
+    }
+  }
+};
 var map;  // Main map
 var markers = [];  // Generated markers; every marker generated is added here
 var infoClosed = false;  // Keeps track of whether or not an infoWindow has been closed
 var currentlyOpened = false; // Keeps track of whether or not an infoWindow is currently opened
+
 function initMap() {
-  // Generate the map with a zoom of 13
+  // Function called when navigator.geolocation.getCurrentPosition fails
+  function error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  }
+  // Function called when navigator.geolocation.getCurrentPosition succeeds
+  function success(position) {
+    var coords = position.coords;
+    userLocation.geometry.location.lat = function() {
+      return coords.latitude;
+    };
+    userLocation.geometry.location.lng = function() {
+      return coords.longitude;
+    };
+    map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
+    makeMarker(userLocation);
+    console.log('Successfully obtained user geolocation data.');
+  }
+  // Try getting the user's current geolocation information
+  navigator.geolocation.getCurrentPosition(success, error);
   map = new google.maps.Map(document.getElementById('map'), {
     center: new google.maps.LatLng(42.360091,-71.09416),
     zoom: 13
   });
-  // Set the center of the map to MIT
-  map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
+  var mapCenter;
+  if (userLocation.geometry.location.lat() && userLocation.geometry.location.lng()) {
+    mapCenter = new google.maps.LatLng(
+      userLocation.geometry.location.lat(),
+      userLocation.geometry.location.lng()
+    );
+  } else {
+    mapCenter = new google.maps.LatLng(42.360091,-71.09416);
+  }
+  // Force set center of the map again
+  map.setCenter(mapCenter);
   var bounds = new google.maps.LatLngBounds();
 
   // Convenient function to generate a marker and place it on the map
@@ -28,7 +71,7 @@ function initMap() {
     var wheelchairCounter = 0;
     var marker = new google.maps.Marker({
       map: map,
-      position: place.geometry.location,
+      position: new google.maps.LatLng(lat, lng),
       title: `<p>${name}</p><p>${address}</p><p>MBTA stops information currently being processed. The card will refresh when the info is available.</p>`,
       animation: google.maps.Animation.DROP
     });
@@ -98,7 +141,9 @@ function initMap() {
   function pinPlace(searchText) {
     var service = new google.maps.places.PlacesService(map);
     var request = {
-      query: searchText.toLowerCase()
+      query: searchText.toLowerCase(),
+      location: mapCenter,
+      radius: '50000'
     };
     service.textSearch(request, callback);
   }
