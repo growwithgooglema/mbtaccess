@@ -2,7 +2,7 @@
 // Cache static files and images
 // Cache GET and POST requests, especially API calls
 
-var cacheName = 'gwg-mbta-v10';
+var cacheName = 'gwg-mbta-v11';
 var key = "AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ";
 var staticScripts = [
   "https://code.jquery.com/jquery-3.2.1.slim.min.js",
@@ -11,6 +11,8 @@ var staticScripts = [
   "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
   "https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css",
   "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js",
+  "https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css",
+  "https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js",
   "https://api-v3.mbta.com/stops",
   "data/cleaner_universities.json",
   "index.html",
