@@ -15,13 +15,13 @@
 
 ## Description
 
-- This is a progressive web application that uses Google Maps and MBTA APIs.
-- We are developing on the `dev` branch.
+This app integrates the Google Maps and MBTA APIs to provide wheelchair accessibility data for MBTA stops.
 
 ## Instructions
 
 - Please review the instructions in [CONTRIBUTING.md](CONTRIBUTING.md).
 - Please behave according to the [Code of Conduct](CODE_OF_CONDUCT.md).
+- We are developing on the `dev` branch.
 
 ## Repository contents
 
