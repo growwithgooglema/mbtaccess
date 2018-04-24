@@ -182,7 +182,7 @@ function initMap() {
     if (searchText === "" || !searchText) {
       // alert("Cannot submit form with empty search text.");
       // return;
-      if (! userLocation.geometry.location.lat() && !userLocation.geometry.location.lng()) {
+      if (!userLocation.geometry.location.lat() && !userLocation.geometry.location.lng()) {
         alert("The application is probably busy retrieving your current location. Please try again later.");
         return;
       }

@@ -58,6 +58,9 @@
     </div>
     <!-- Map -->
     <div class="container" id="map"></div>
+    <div class="container">
+      <table id="stops" class="display compact" width="100%" style="padding-left: 0%;"></table>
+    </div>
   <!-- TODO: close main tag here -->
   <!-- Footer -->
   <footer class="container footer">
@@ -87,7 +90,7 @@
     document.onreadystatechange = function () {
       if (document.readyState === "complete") {
         map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
-        map.setZoom(15);
+        map.setZoom(13);
       }
     }
   </script>
