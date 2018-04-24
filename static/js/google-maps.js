@@ -23,6 +23,7 @@ var map;  // Main map
 var markers = [];  // Generated markers; every marker generated is added here
 var infoClosed = false;  // Keeps track of whether or not an infoWindow has been closed
 var currentlyOpened = false; // Keeps track of whether or not an infoWindow is currently opened
+var stops = [];
 
 function initMap() {
   // Function called when navigator.geolocation.getCurrentPosition fails
@@ -93,7 +94,7 @@ function initMap() {
           lat: value.lat,
           lng: value.lng,
           wheelchair_accessible: value.wheelchair_boarding,
-          formatted_address: `${distance.toFixed(2)} mile from ${place.name}.`
+          formatted_address: `${distance.toFixed(2)} mile from ${place.name}`
         });
         if (value.wheelchair_boarding > 0) {
           wheelchairCounter += 1;
@@ -101,6 +102,7 @@ function initMap() {
         } else {
           stop.message = "Not Wheelchair Accessible";
         }
+        stops.push(stop);
         var marker = new google.maps.Marker({
           map: map,
           position: new google.maps.LatLng(stop.geometry.location.lat(), stop.geometry.location.lng()),
@@ -126,7 +128,25 @@ function initMap() {
       map.setCenter(bounds.getCenter());
       console.log(`Number of stops: ${stopCounter}; Wheelchairs: ${wheelchairCounter}.`);
       // map.fitBounds(bounds);
-      console.log('Markers generated and added to global markers tracker');
+      $("#stops").DataTable({
+        data: stops.map(function(stop) {
+          var lat = stop.geometry.location.lat();
+          var lng = stop.geometry.location.lng();
+          var directionLink = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
+          return [
+            `<a href="${directionLink}" target="_blank">${stop.name}</a>`,
+            stop.formatted_address,
+            stop.message
+          ];
+        }),
+        columns: [
+          {title: "Stop"},
+          {title: "Distance"},
+          {title: "Accessibility"}
+        ],
+        responsive: true,
+        destroy: true
+      });
     }).catch(function(error) {
       console.log('An error occurred...');
       console.log(error);
@@ -170,8 +190,9 @@ function initMap() {
   function hideMarkers() {
     for (let i=0; i<markers.length; i++) {
       markers[i].setMap(null);
-      markers.pop();
     }
+    markers = [];
+    stops = [];
   }
   // An event handler that grabs the submitted search text and passes it to pinPlace
   document.querySelector("form").addEventListener('submit', function(event) {
