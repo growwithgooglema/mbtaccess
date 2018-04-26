@@ -1,4 +1,4 @@
-function getDistanceBetweenTwoPoints (pt1, pt2) {
+function getDistanceBetweenTwoPoints (pt1, pt2, unit='km') {
   /**
    * Uses the Haversine forumla to get distance between two points.
    *
@@ -8,6 +8,8 @@ function getDistanceBetweenTwoPoints (pt1, pt2) {
    *
    * @param {map} pt1 The lat and lon of the first point
    * @param {map} pt2 The lat and lon of the second point
+   * @param {string} [km]  unit  The unit to use with distance calculations.
+   * Accepts 'm' or 'miles' to use miles.
    *
    * @return {float} The distance between the two points in km.
    */
@@ -40,7 +42,11 @@ function getDistanceBetweenTwoPoints (pt1, pt2) {
 
   const c = 2 * Math.asin(Math.sqrt(a)) * 100;
 
-  const d = (R * c) / 100;
+  let d = (R * c) / 100;
+  
+  if (unit.toLowerCase() === 'm' || unit.toLowerCase() === 'miles') {
+    d = d * 0.621371;
+  }
 
   return d; 
 }
@@ -49,7 +55,7 @@ function toRadians (n) {
   return (n * (Math.PI / 180));
 }
 
-function getAllPointsInRadius (centerPt, pts, radius) {
+function getAllPointsInRadius (centerPt, pts, radius, unit='km') {
   /**
    *  Gets a list of all points within a radius of a given point.
    *
@@ -65,13 +71,15 @@ function getAllPointsInRadius (centerPt, pts, radius) {
    *  Points within the given radius are returned.
    *  @param {int}  radius  The distance (in km) from which all other points are
    *  compared.
+   *  @param {string} [km]  unit  The unit to use with distance calculations.
+   *  Accepts 'm' or 'miles' to use miles.
    *
    * @return  {array} A list which contains all the points from pts that are
    *  within the radius from the centerPt.
    */
   ptsInRadius = [];
   pts.forEach( function (element) {
-    if (getDistanceBetweenTwoPoints(centerPt, element) <= radius) {
+    if (getDistanceBetweenTwoPoints(centerPt, element, unit) <= radius) {
       ptsInRadius.push(element);
     }
   });
