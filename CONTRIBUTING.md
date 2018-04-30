@@ -6,7 +6,8 @@
 - [Instructions](#instructions)
   - [Suggest a project](#suggest-a-project)
   - [Get started with Git and GitHub](#get-started-with-git-and-github)
-  - [Fork, clone, and branch](#fork-clone-and-branch)
+  - [Clone or fork](#clone-or-fork)
+  - [Branch](#branch)
   - [Commit](#commit)
   - [Push](#push)
   - [Submit pull request](#submit-pull-request)
@@ -52,7 +53,7 @@ To initiate a collaborative project, please do the following:
   - [GitHub & Collaboration](https://www.udacity.com/course/github-collaboration--ud456) Udacity course
   - [Quick reference guide to Git and GitHub from @br3ndonland](https://github.com/br3ndonland/general/blob/master/guide-git.md)
 
-### Fork, clone, and branch
+### Clone or fork
 
 - Fork vs. clone: A **clone** is a copy of a repository on your computer. A **[fork](https://help.github.com/articles/fork-a-repo/)** duplicates the project into the user's GitHub account, and still maintains connection to the original master. Forks can also be cloned. **If you are not a repository owner, you will not be able to push to the original repository.** Fork the repository on GitHub instead of directly cloning. Changes to forks can be merged into the `upstream master` with pull requests.
 - Clone the repository from the GitHub fork to your computer.
@@ -64,18 +65,28 @@ To initiate a collaborative project, please do the following:
     git clone git@github.com:growwithgooglema/projects.git
     ```
 
+### Branch
+
 - Create a branch to isolate changes from the `master` branch.
-  - Use a clear name for your branch. When submitting a pull request, the pull request name is auto-populated from the branch name.
-  - The branch name `dev` is commonly used.
-  - Again, GitHub Desktop can be used for this.
+  - Use a clear, descriptive name for your branch. The branch name `dev` is commonly used.
   - Command line option:
 
     ```bash
     git checkout -b myspecialproject
     ```
 
-  - The `checkout` command creates a branch and switches to the new branch.
+  - The `checkout -b` command creates a branch and switches to the new branch.
   - The project can be further branched, for example onto a feature branch.
+- **Keeping branches in sync**: If `dev` or topic branches are behind `master` in commits, it is useful to perform a merge into the branch, so that the branches stay in sync with the master. The `merge` step will require a new Git commit to merge the branches.
+
+  ```text
+  git checkout master
+  git pull
+  git checkout dev
+  git merge master
+  ```
+
+- Rebase is sometimes used to avoid merge commits (such as `git pull --rebase`), but should not be done on shared branches. See [Merging vs. Rebasing by Atlassian Bitbucket](https://www.atlassian.com/git/tutorials/merging-vs-rebasing#the-golden-rule-of-rebasing).
 
 ### Commit
 
@@ -92,14 +103,6 @@ To initiate a collaborative project, please do the following:
 
 - **Make meaningful, cohesive, focused commits.** Commit when an objective has been completed, or before a major change is made. Break changes up into topics so the maintainer can easily accept or reject changes from a pull request.
 - **Include a commit message, with an imperative title.** See [How to make a Git commit message](https://chris.beams.io/posts/git-commit/).
-- If `dev` or topic branches are behind `master` in commits, it is useful to perform a merge into the branch, so that the branches stay in sync with the master.
-
-  ```text
-  git checkout master
-  git pull
-  git checkout dev
-  git merge master
-  ```
 
 ### Push
 
@@ -165,6 +168,7 @@ To initiate a collaborative project, please do the following:
 - [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
 - [markdownlint](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
 - [Python](https://code.visualstudio.com/docs/languages/python)
+- [Settings Sync](https://marketplace.visualstudio.com/items?itemName=Shan.code-settings-sync) can be used with GitHub Gists to sync settings.
 
 #### Folder settings
 

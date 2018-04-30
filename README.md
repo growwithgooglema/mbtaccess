@@ -7,6 +7,7 @@
 - [Table of Contents](#table-of-contents)
 - [Description](#description)
 - [Instructions](#instructions)
+- [Stack](#stack)
 - [Repository contents](#repository-contents)
 - [Running the application](#running-the-application)
   - [Docker](#docker)
@@ -15,13 +16,21 @@
 
 ## Description
 
-- This is a progressive web application that uses Google Maps and MBTA APIs.
-- We are developing on the `dev` branch.
+This app integrates the Google Maps and MBTA (Massachusetts Bay Transportation Authority) APIs to provide wheelchair accessibility data for MBTA stops.
+
+MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provides public transportation data in JSON API format. One of the under-utilized datasets in their API is the wheelchair accessibility of the stops. Google Maps [recently started](http://fortune.com/2018/03/15/google-maps-wheelchair-accessible-routes/) providing wheelchair accessibility info, but the implementation is not particularly extensive.
+
+**We aim to create a web app that quickly and conveniently identifies wheelchair accessible stops near the user.**
 
 ## Instructions
 
 - Please review the instructions in [CONTRIBUTING.md](CONTRIBUTING.md).
 - Please behave according to the [Code of Conduct](CODE_OF_CONDUCT.md).
+- We are developing on the `dev` branch.
+
+## Stack
+
+<!-- TODO: We should provide a clear description of how the app works. -->
 
 ## Repository contents
 
@@ -40,7 +49,7 @@
     - [school.js](static/js/school.js)
     - [utilities.js](static/js/utilities.js): Calculates distances in order to display stop information based on the location searched.
     - [utilities.test.js](static/js/utilities.test.js)
-- [.gitignore](.gitignore): List of instructions that tell Git to ignore certain files in the directory.
+- [.gitignore](.gitignore): Instructions to Git to exclude certain files from commits.
 - [.jshintrc](.jshintrc)
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Guidelines for conduct.
 - [CONTRIBUTING.md](CONTRIBUTING.md): Instructions for contributing to the repository.
