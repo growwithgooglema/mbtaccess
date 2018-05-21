@@ -68,15 +68,22 @@ MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provid
 
 ### Docker
 
-<!-- TODO: Update this section after setting up Docker
+The application is available as a container image on the Docker Hub. With each commit to the Master branch in the GitHub repository, a new container image is created. 
 
-We have deployed our application to a [Docker](https://www.docker.com/) container.
+Pull the image with
+```bash
+docker pull growwithgooglema/gwg-mbta:latest
+```
 
-The Docker container has been deployed to DockerHub.
+To run the container locally, run:
+```bash
+docker run -d -p 80:8000 growwithgooglema/gwg-mbta:latest
+```
 
-The Docker container can also be run locally.
+Where `-p 80:8000` specifies the port-mapping and maps the default http port 80 from your local machine to port 8000 on the container. Alternatively, you can map a different local port than 80 to the container, but you have to specify port 8000 as the container port unless you modify the Dockerfile and change the http server listener port.
 
--->
+To check if the application is running correctly, open a web browser and go to `http://localhost:80`.
+
 
 ### Local HTTP server
 
