@@ -110,3 +110,6 @@ ENV/
 
 # Node Modules
 node_modules/
+
+# Test DB
+test_database.sqlite

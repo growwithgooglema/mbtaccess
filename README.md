@@ -94,22 +94,43 @@ The main application resides inside the `index.html` file. To run it, you will n
 In `python 2+`:
 
 ```bash
-git clone git@github.com:growwithgooglema/gwg-mbta.git
-cd gwg-mbta
+git clone git@github.com:growwithgooglema/mbtaccess.git
+cd mbtaccess
 python -m SimpleHTTPServer 8000
 ```
 
 In `python 3+`
 
 ```bash
-git clone git@github.com:growwithgooglema/gwg-mbta.git
-cd gwg-mbta
+git clone git@github.com:growwithgooglema/mbtaccess.git
+cd mbtaccess
 python3 -m http.server 8000 -b localhost
 ```
 
 If either of these two worked, head to [http://127.0.0.1:8000](http://127.0.0.1:8000) from your browser. The application is being served there.
 
 *Note*: If you get any error related to a `PORT` issue, then it must be that you've got something running at port 8000; in which case, you should change 8000 to some other port that is not currently being used.
+
+
+### [Using Flask](http://flask.pocoo.org/)
+To speed up the application, we're contemplating using Flask to generate API endpoints such `stops?lat=value&lon=value`.
+
+To interact with the application using Flask, the following steps need to be taken:
+1. [Create a python virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)
+2. Activate the virtual environment
+3. Install the packages inside `requirements.txt` with `pip install -r requirements.txt`
+4. Run `python migrate.py` (this needs to be run only once to populate the `mbta_stops` table in a DB called `test_database.sqlite`)
+5. Run `python app.py`
+6. Go to `http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296` to see the returned data from the API
+7. If you're adventurous, change the values for `lat` and `lon` in the query string to see new results
+8. Test the [`index.html`](http://127.0.0.1:5000/index.html) and [`universities.html`](http://127.0.0.1:5000/universities.html)
+
+### Notes about flask:
+1. flask, by default, will bind the application on port 5000. If you wish to change this, you can export an `APP_PORT` environment variable and call the script:
+```
+export APP_PORT=7000 && python app.py
+```
+2. Since the API endpoints have not yet been hosted anywhere, the only way to test them is to run the application locally. The goal is to deploy the API endpoints on Google Cloud.
 
 ## Contributors
 
