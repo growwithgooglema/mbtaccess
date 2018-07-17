@@ -3,7 +3,7 @@ DB module for generating a Stop data model, along with future data models
 """
 from flask_sqlalchemy import SQLAlchemy
 
-from scripts.utilities import get_stops, get_distance
+from utilities import get_stops, get_distance
 
 
 db = SQLAlchemy()
