@@ -3,7 +3,7 @@ DB module for generating a Stop data model, along with future data models
 """
 from flask_sqlalchemy import SQLAlchemy
 
-from scripts.utilities import get_stops, get_distance
+from utilities import get_stops, get_distance
 
 
 db = SQLAlchemy()
@@ -41,10 +41,10 @@ class Stop(db.Model):
 
         :param address: The address associated with the stop
         :type: str
-        
+
         :param longitude: Longitude of the stop
         :type: float
-        
+
         :param latitude: Latitude of the stop
         :type: float
 
@@ -73,7 +73,6 @@ class Stop(db.Model):
         self.platform_name = platform_name
         self.location_type = int(location_type) if location_type else None
         self.wheelchair_boarding = int(wheelchair_boarding) if wheelchair_boarding else None
-    
 
     def within_distance(self, point, distance=(1.609344)/2.0):
         """
@@ -92,7 +91,6 @@ class Stop(db.Model):
         d = {'lat': self.latitude, 'lon': self.longitude}
         return get_distance(d, point) <= distance
 
-    
     @classmethod
     def from_api(cls, url):
         """
@@ -102,7 +100,7 @@ class Stop(db.Model):
 
         :param url: The endpoint for the stops API
         :type: str
-        
+
         :return: Returns a list of Stop objects
         :rtype: list
         """
@@ -114,7 +112,7 @@ class Stop(db.Model):
                 d[k] = v
             output.append(cls(**d))
         return output
-    
+
     def serialize(self):
         """
         Provide a method for serializing this object
