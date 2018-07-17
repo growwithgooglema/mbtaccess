@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """
-Module written to replicate Josh's utilities.js script in Python.
-I could not get https in nodejs to work properly, so this is a way to generate the file
-that addratios.js is trying to generate.
+Distance calculation functions for MBTAccess app
 """
 import argparse
 import json
@@ -14,11 +12,7 @@ from math import sin, cos, pow, sqrt, pi, asin
 
 def get_distance(point1, point2):
     """
-    Get the distance between two points, each
-    represented by a dictionary with keys lat and lon.
-    lat maps to latitude, while lon maps to longitude.
-    The function uses the Haversine forumla to calculate
-    the distance between the two points in kilometers.
+    Calculate distance between two points in kilometers with the Haversine formula.
 
     :type: dict
     :param: point1: dictionary with geolocation information
@@ -41,7 +35,6 @@ def get_distance(point1, point2):
     return (earth_radius * angular_distance) / 100
 
 
-
 def to_radian(num):
     """
     Convert the given number's units to radian
@@ -56,8 +49,7 @@ def to_radian(num):
 
 def get_stops(url):
     """
-    Takes the URL to the MBTA stops json data
-    and parses the data into a list of dictionaries
+    Parse MBTA stop data data into a list of dictionaries.
 
     :type: string
     :param: url: currently, this value is https://api-v3.mbta.com/stops
@@ -75,10 +67,7 @@ def get_stops(url):
 
 def process_schools(schools_data, url):
     """
-    Given the path to the data for schools,
-    this functions tries to update the schools' numbers of
-    MBTA stops along with their numbers of wheelchair accessible
-    stops. The ratio of wheelchair to total stops is also added.
+    Calculate number of wheelchair-accessible and total stops for each school.
 
     type: str
     :param: schools_data: path to the school data json file
@@ -103,12 +92,11 @@ def process_schools(schools_data, url):
                     if attributes.get('wheelchair_boarding') > 0:
                         school['wheelchairs'] += 1
             if school['stops'] > 0:
-                school['ratio'] =  school['wheelchairs']/school['stops']
+                school['ratio'] = school['wheelchairs']/school['stops']
             else:
                 school['ratio'] = 0
             new_schools.append(school)
     return json.dumps(new_schools)
-
 
 
 if __name__ == '__main__':
