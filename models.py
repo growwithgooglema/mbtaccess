@@ -73,6 +73,7 @@ class Stop(db.Model):
         self.platform_name = platform_name
         self.location_type = int(location_type) if location_type else None
         self.wheelchair_boarding = int(wheelchair_boarding) if wheelchair_boarding else None
+        self.distance = 0
 
     def within_distance(self, point, distance=(1.609344)/2.0):
         """
@@ -89,7 +90,8 @@ class Stop(db.Model):
         :rtype: bool
         """
         d = {'lat': self.latitude, 'lon': self.longitude}
-        return get_distance(d, point) <= distance
+        self.distance = get_distance(d, point)
+        return self.distance <= distance
 
     @classmethod
     def from_api(cls, url):
@@ -127,4 +129,5 @@ class Stop(db.Model):
             'platform_name': self.platform_name,
             'location_type': self.location_type,
             'wheelchair_boarding': self.wheelchair_boarding,
+            'distance': self.distance * 0.621371,
         }

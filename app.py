@@ -19,18 +19,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index.html')
 def index():
     """
     index.html and the root page
-    """
-    return render_template('index.html')
-
-
-@app.route('/index.html')
-def indexfull():
-    """
-    Explictly access index.html
     """
     return render_template('index.html')
 
