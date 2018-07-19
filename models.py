@@ -119,6 +119,7 @@ class Stop(db.Model):
         """
         Provide a method for serializing this object
         """
+        distance = self.distance * 0.621371 if hasattr(self, 'distance') else 0
         return {
             'stop_id': self.stop_id,
             'name': self.name,
@@ -129,5 +130,5 @@ class Stop(db.Model):
             'platform_name': self.platform_name,
             'location_type': self.location_type,
             'wheelchair_boarding': self.wheelchair_boarding,
-            'distance': self.distance * 0.621371,
+            'distance': distance,
         }
