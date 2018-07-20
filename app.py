@@ -9,7 +9,7 @@ from flask import Flask, jsonify, request, render_template, make_response
 from models import db, Stop
 
 
-app = Flask(__name__, template_folder=os.path.dirname(__file__))
+app = Flask(__name__)
 if os.environ.get('DBASE_URL'):
     db_url = os.environ.get('DBASE_URL')
 else:
