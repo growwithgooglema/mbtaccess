@@ -6,13 +6,12 @@
 
 - [Table of Contents](#table-of-contents)
 - [Description](#description)
-- [Instructions](#instructions)
-- [Stack](#stack)
-- [Repository contents](#repository-contents)
-- [Running the application](#running-the-application)
+- [Contributing](#contributing)
+- [Application stack](#application-stack)
+  - [Flask](#flask)
   - [Docker](#docker)
-  - [Local HTTP server](#local-http-server)
-- [Contributors](#contributors)
+  - [Front-end](#front-end)
+- [Maintainers](#maintainers)
 
 ## Description
 
@@ -22,15 +21,84 @@ MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provid
 
 **We aim to create a web app that quickly and conveniently identifies wheelchair accessible stops near the user.**
 
-## Instructions
+## Contributing
 
-- Please review the instructions in [CONTRIBUTING.md](CONTRIBUTING.md).
+- This is a collaborative open-source project by members of @growwithgooglema/mbtaccess.
+- We have a [team discussion board](https://github.com/orgs/growwithgooglema/teams/mbtaccess).
 - Please behave according to the [Code of Conduct](CODE_OF_CONDUCT.md).
+- Please review the [instructions for contributing](CONTRIBUTING.md).
 - We are developing on the `dev` branch.
 
-## Stack
+## Application stack
 
-<!-- TODO: We should provide a clear description of how the app works. -->
+### Flask
+
+#### Flask summary
+
+- The application originally fetched JSON data directly from the MBTA API, and then used client-side JavaScript to iterate over the stops and drop map pins for stops near the user.
+- After experiencing slow speeds, we rebuilt our app with [Python 3](https://docs.python.org/3/) and the Python framework [Flask](http://flask.pocoo.org/). Instead of fetching data directly from MBTA, we store data in our own back-end database API. We then perform the calculations with Python and structure the application with Flask. Python code has been formatted according to the [PEP 8](http://pep8.org/) specification, with line length extended to 120 characters.
+- [utilities.py](utilities.py) contains distance calculation functions. The `get_distance` function uses the [Haversine formula](https://rosettacode.org/wiki/Haversine_formula#Python) to calculate the distance between two points, such as between the user's location and an MBTA stop.
+- models.py
+- [migrate.py](migrate.py) creates a database, fetches data from the MBTA API, and stores it in the database.
+- [app.py](app.py) contains the main Flask application code. This file controls the app, with Flask routing functions to render the pages of the web application and access app content. The database is accessed by [SQLAlchemy](http://www.sqlalchemy.org/) from within [app.py](app.py).
+
+#### Running Flask
+
+The application should run within a virtual environment. Python 3 is bundled with the `venv` module for creation of virtual environments.
+
+1. **Install Python virtual environment and requirements**: The following shell commands will create a Python virtual environment, activate the virtual environment and display a modified virtual environment prompt, and install required modules listed in requirements.txt.
+
+    ```sh
+    cd mbtaccess
+    python3 -m venv venv
+    # activate virtual env
+    . venv/bin/activate
+    # install modules listed in requirements.txt
+    (venv) <PATH> pip install -r requirements.txt
+    ```
+
+2. **Set up database**: Run `python migrate.py` from within the virtual environment. This needs to be run only once to populate the `mbta_stops` table in a DB called `test_database.sqlite`.
+3. **Start application**: Run `python app.py` from within the virtual environment. Flask will start a local web server.
+    - Flask, by default, will bind the application to port 5000. If you wish to change this, you can export an `APP_PORT` environment variable and call the script:
+
+      ```py
+      export APP_PORT=7000 && python app.py
+      ```
+
+4. **Test the back-end API locally**: In a web browser, navigate to [http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296](http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296) to see the data returned from the API. If you're adventurous, change the values for `lat` and `lon` in the query string to see new results.
+    - The API endpoints have not yet been hosted anywhere. The only way to test them is to run the application locally.
+    - The goal is to deploy the API endpoints to Google Cloud.
+5. **Test the app pages locally**: Navigate to [index.html](http://127.0.0.1:5000) and [universities.html](http://127.0.0.1:5000/universities.html)
+
+### Docker
+
+The application is assembled into a Docker container, and is available as a container image on Docker Hub. Docker Hub rebuilds the container after each commit to the `master` branch.
+
+1. **Pull Docker container image**:
+
+    ```sh
+    docker pull growwithgooglema/gwg-mbta:latest
+    ```
+
+2. **Run Docker container locally**:
+
+    ```sh
+    docker run -d -p 80:8000 growwithgooglema/gwg-mbta:latest
+    ```
+
+    - `-p 80:8000` maps the http port 80 from your local machine to port 8000 on the container.
+    - Local ports other than 80 can be used.
+    - Container ports other than 8000 can be used if the Dockerfile is modified for the new http server listener port.
+
+3. **Run application**: To check if the application is running correctly, open a web browser and navigate to [http://localhost:80](http://localhost:80).
+
+### Front-end
+
+- The application pages are styled with [Bootstrap 4](https://getbootstrap.com), a library of HTML, CSS, and JavaScript components.
+- Markdown documents in the repository have been formatted in a standard style, based on suggestions from [vscode-markdownlint](https://github.com/DavidAnson/vscode-markdownlint).
+
+<!--
+TODO update the file list after rebuilding the app with Flask
 
 ## Repository contents
 
@@ -63,55 +131,9 @@ MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provid
 - [sw.js](sw.js): This is the Service Worker file. Service Worker is a JavaScript file that sits between the browser and network requests. It helps to coordinate retrieval of information from the network and cache.
 - [universities.html](universities.html): This is the webpage that shows the table with university accessibility data.
 - [utilities.py](utilities.py): Python module with helper functions for the application. The functions calculate distances in order to display stop information based on the location searched.
+ -->
 
-## Running the application
-
-### Docker
-
-The application is available as a container image on the Docker Hub. With each commit to the Master branch in the GitHub repository, a new container image is created. 
-
-Pull the image with
-```bash
-docker pull growwithgooglema/gwg-mbta:latest
-```
-
-To run the container locally, run:
-```bash
-docker run -d -p 80:8000 growwithgooglema/gwg-mbta:latest
-```
-
-Where `-p 80:8000` specifies the port-mapping and maps the default http port 80 from your local machine to port 8000 on the container. Alternatively, you can map a different local port than 80 to the container, but you have to specify port 8000 as the container port unless you modify the Dockerfile and change the http server listener port.
-
-To check if the application is running correctly, open a web browser and go to `http://localhost:80`.
-
-
-### Local HTTP server
-
-The main application resides inside the `index.html` file. To run it, you will need to start an HTTP server. `Python` offers a quick and dirty way to do this. Depending on whether you're on `python 2+` or `python 3+`, you should be able get an HTTP server started with the following:
-
-*Note*: Please make sure you switch to the directory where the `index.html` file is.
-
-In `python 2+`:
-
-```bash
-git clone git@github.com:growwithgooglema/gwg-mbta.git
-cd gwg-mbta
-python -m SimpleHTTPServer 8000
-```
-
-In `python 3+`
-
-```bash
-git clone git@github.com:growwithgooglema/gwg-mbta.git
-cd gwg-mbta
-python3 -m http.server 8000 -b localhost
-```
-
-If either of these two worked, head to [http://127.0.0.1:8000](http://127.0.0.1:8000) from your browser. The application is being served there.
-
-*Note*: If you get any error related to a `PORT` issue, then it must be that you've got something running at port 8000; in which case, you should change 8000 to some other port that is not currently being used.
-
-## Contributors
+## Maintainers
 
 - [@AbdouSeck](https://github.com/AbdouSeck)
   - **Chief Data Wrangler**
@@ -127,9 +149,3 @@ If either of these two worked, head to [http://127.0.0.1:8000](http://127.0.0.1:
 - [@KonradSchieban](https://github.com/KonradSchieban)
   - **Cloudmaster**
   - **The Dockerizer**
-- [@noirfatale](https://github.com/noirfatale)
-  - **Front-End programming**
-  - **Design Maven**
-  - **People Ops**
-- [@sereneliu](https://github.com/sereneliu)
-  - **Front-End Ninja**
