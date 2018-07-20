@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>MBTAccess</title>
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <!-- Google Fonts -->
+  <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Roboto"> -->
+  <!-- DataTables.js core CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js">
+  <!-- Responsive extension to DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="static/css/custom.css">
+  <!-- Favicon -->
+  <link rel="icon" href="static/img/ic_directions_white_24dp_1x.png">
+  <!-- For IE 9 and below. -->
+  <!-- [if IE]><link rel="shortcut icon" href="static/img/favicon.ico"><![endif] -->
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-primary rounded-bottom">
+      <a class="navbar-brand h1 lead" href="{{ url_for('index') }}">
+        <img src="static/img/ic_directions_white_24dp_1x.png" alt="Icon for navbar">
+        MBTAccess
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('index') }}">Interactive Map</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('universities') }}">University Ranking</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <!-- Main page content -->
+  <main>
+    <div class="container">
+      {% block content %}
+      {% endblock %}
+    </div>
+  </main>
+<!-- Footer -->
+  <footer class="footer">
+    <hr class="border border-secondary rounded">
+    <div class="text-muted text-center pb-2">
+      <span class="footer-copyright" id="copyright"></span>
+        <a href="https://github.com/growwithgooglema">
+          Grow with Google - New England
+        </a>
+    </div>
+  </footer>
+  <!-- <script type="text/javascript" src="static/js/index.js"></script> -->
+  <!-- <script type="text/javascript" src="static/js/utilities.js"></script> -->
+  <!-- <script type="text/javascript" src="static/js/localforage.min.js"></script> -->
+  <!-- <script type="text/javascript" src="static/js/dbCaching.js"></script> -->
+  <!-- Bootstrap core JavaScript -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+  <!-- DataTables JavaScript -->
+  <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+  <!-- Google Maps JavaScript -->
+  <script type="text/javascript" src="static/js/google-maps.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY&libraries=places&callback=initMap">
+  </script>
+  <script src="static/js/universities.js"></script>
+  <script>
+    document.onreadystatechange = function () {
+      if (document.readyState === "complete") {
+        map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
+        map.setZoom(13);
+      }
+    }
+  </script>
+</body>
+</html>
