@@ -3,7 +3,7 @@
 // Cache GET and POST requests, especially API calls
 
 var cacheName = 'gwg-mbta-v12';
-var key = "AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ";
+var key = "AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY";
 var staticScripts = [
   "https://code.jquery.com/jquery-3.2.1.slim.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js",
