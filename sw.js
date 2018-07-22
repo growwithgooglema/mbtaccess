@@ -3,7 +3,7 @@
 // Cache GET and POST requests, especially API calls
 
 var cacheName = 'gwg-mbta-v13';
-var key = "AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ";
+var key = "AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY";
 var staticScripts = [
   "https://code.jquery.com/jquery-3.2.1.slim.min.js",
   "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js",
@@ -13,13 +13,9 @@ var staticScripts = [
   "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js",
   "https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css",
   "https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js",
-  "https://api-v3.mbta.com/stops",
   "data/cleaner_universities.json",
   "index.html",
-  "static/js/index.js",
-  "static/js/dbCaching.js",
-  "static/js/localforage.min.js",
-  "static/js/utilities.js"
+  "static/js/sw-install.js"
 ];
 
 self.addEventListener('fetch', function(event) {
