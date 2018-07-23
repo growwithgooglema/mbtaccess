@@ -76,7 +76,8 @@ def process_schools(schools_data, url):
     """
     if not os.path.exists(schools_data):
         raise Exception("Can't process a file that does not exist.")
-    schools = json.loads(open(schools_data).read())
+    with open(schools_data) as f:
+        schools = json.load(f)
     stops = get_stops(url)
     new_schools = []
     for school in schools:
