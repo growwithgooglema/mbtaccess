@@ -21,7 +21,6 @@ db.init_app(app)
 
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index.html')
 def index():
     """App route function for homepage."""
     return render_template('index.html')
