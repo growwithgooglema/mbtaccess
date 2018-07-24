@@ -59,7 +59,10 @@ def get_stops(url):
     rqst = request.Request(url)
     response = request.urlopen(rqst)
     if response.status == 200:
-        data = json.loads(response.read())
+        contents = response.read()
+        if not isinstance(contents, str):
+            contents = contents.decode('utf8')
+        data = json.loads()
         return data.get('data')
     msg = "The HTTP request to ${u} failed with reason ${r}."
     raise Exception(msg.format(u=url, r=response.reason))
