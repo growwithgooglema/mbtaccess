@@ -45,12 +45,12 @@ class AppTest(unittest.TestCase):
         for the given endpoints.
         """
         endpoints = {
-            'index.html': 200,
+            'index.html': 404,
             '/': 200,
-            '/index': 404,
             '/sw.js': 200,
             '/data/cleaner_universities.json': 200,
-            '/universities.html': 200,
+            '/universities.html': 404,
+            '/universities': 200,
             '/stops?lat=42.35947&lon=-71.09296': 200,
             '/stop/5': 200,
         }
