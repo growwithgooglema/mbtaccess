@@ -14,7 +14,8 @@ var staticScripts = [
   "https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css",
   "https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js",
   "data/cleaner_universities.json",
-  "index.html",
+  "/",
+  "/universities",
   "static/js/sw-install.js"
 ];
 
