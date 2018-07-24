@@ -62,7 +62,7 @@ def get_stops(url):
         contents = response.read()
         if not isinstance(contents, str):
             contents = contents.decode('utf8')
-        data = json.loads()
+        data = json.loads(contents)
         return data.get('data')
     msg = "The HTTP request to ${u} failed with reason ${r}."
     raise Exception(msg.format(u=url, r=response.reason))
