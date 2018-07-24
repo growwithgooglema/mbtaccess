@@ -31,7 +31,7 @@ class UtilitiesTest(unittest.TestCase):
         """
         Test utils.get_stops with a bad URL
         """
-        with self.assertRaises(Exception):
+        with self.assertRaises(utils.BadUrlError):
             utils.get_stops(self.bad_url)
     
     def test_good_get_stops(self):
