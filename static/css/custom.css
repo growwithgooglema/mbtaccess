@@ -1,12 +1,12 @@
-header {
-  font-family: Roboto;
-}
-html, body {
-  height: 100%;
+html, body, main, .container {
+  height: 90%;
 }
 #map {
-  height: 90%;
-  margin: auto;
+  height: 100%;
+}
+#universities {
+  height: 80%;
+  font-size: 0.8rem;
 }
 .center {
   margin: auto;
