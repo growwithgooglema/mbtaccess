@@ -1,15 +1,16 @@
 """
-Flask routing module to generate API endpoints for stops and universities
+Flask routing module to generate pages and API endpoints
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 import json
 import os
 
-from flask import Flask, jsonify, request, render_template, make_response
+from flask import Flask, jsonify, make_response, render_template, request
 
 from models import db, Stop
 
 
-app = Flask(__name__, template_folder=os.path.dirname(__file__))
+app = Flask(__name__)
 if os.environ.get('DBASE_URL'):
     db_url = os.environ.get('DBASE_URL')
 else:
@@ -20,19 +21,20 @@ db.init_app(app)
 
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index.html')
 def index():
-    """
-    index.html and the root page
-    """
+    """App route function for homepage."""
     return render_template('index.html')
+
+
+@app.route('/universities')
+def universities():
+    """App route function for universities page."""
+    return render_template('universities.html')
 
 
 @app.route("/sw.js")
 def sworker():
-    """
-    Serve the app's service worker from here.
-    """
+    """Serve the app's service worker from here."""
     with open(os.path.join(os.path.dirname(__file__), 'sw.js')) as f:
         contents = f.read()
     resp = make_response(contents)
@@ -41,26 +43,17 @@ def sworker():
 
 
 @app.route("/data/cleaner_universities.json")
-def clean_colleges():
-    """
-    get to data/cleaner_universities.json
-    """
+def cleaner_universities():
+    """get to data/cleaner_universities.json"""
     with open(os.path.join(os.path.dirname(__file__), 'data', 'cleaner_universities.json')) as f:
         data = json.load(f)
     return jsonify(data)
 
 
-@app.route('/universities.html')
-def colleges():
-    return render_template('universities.html')
-
-
 @app.route('/stops', methods=['GET'])
 def get_stops():
-    """
-    Get all the stops given a set of latitude and longitude
-    Something like /stops?lat=&lon= should point to this function.
-    """
+    """Get stops given latitude and longitude."""
+    # TODO: Something like /stops?lat=&lon= should point to this function.
     keys = ('lat', 'lon')
     missing = []
     user_info = {}
@@ -104,9 +97,7 @@ def get_stops():
 
 @app.route('/stop/<stop_id>', methods=['GET'])
 def get_stop(stop_id):
-    """
-    Get a MBTA stop by its assigned ID. Something like /stop/5 should do.
-    """
+    """Get an MBTA stop by its assigned ID. Something like /stop/5 should do."""
     match = [stop.serialize() for stop in Stop.query.filter_by(stop_id=stop_id).all()]
     status = 'good' if match else 'bad'
     if match:
@@ -121,4 +112,4 @@ def get_stop(stop_id):
 
 
 if __name__ == '__main__':
-    app.run(port=os.environ.get('APP_PORT') or 5000)
+    app.run(port=os.environ.get('APP_PORT') or 5000, debug=True)
