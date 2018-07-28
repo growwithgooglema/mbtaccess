@@ -1,0 +1,8 @@
+language: python
+# install dependencies
+install:
+  - pip install -r requirements.txt
+# run tests
+script:
+  - python migrate.py
+  - python -W ignore -m unittest discover -vv -s tests -p "*test.py"
