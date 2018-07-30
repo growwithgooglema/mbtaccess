@@ -1,18 +1,18 @@
 """
-DB module for generating a Stop data model, along with future data models
+DB module for generating a Stop data model
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
+
 from flask_sqlalchemy import SQLAlchemy
 
-from utilities import get_stops, get_distance
+from utilities import get_distance, get_stops
 
 
 db = SQLAlchemy()
 
 
 class Stop(db.Model):
-    """
-    MBTA stop data model
-    """
+    """Generate data model for MBTA stops"""
     __tablename__ = 'mbta_stops'
     stop_id = db.Column(db.String(50), primary_key=True)
     name = db.Column(db.String(100), primary_key=True)
@@ -116,9 +116,7 @@ class Stop(db.Model):
         return output
 
     def serialize(self):
-        """
-        Provide a method for serializing this object
-        """
+        """Provide a method for serializing this object"""
         distance = self.distance * 0.621371 if hasattr(self, 'distance') else 0
         return {
             'stop_id': self.stop_id,

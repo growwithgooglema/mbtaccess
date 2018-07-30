@@ -1,13 +1,25 @@
 #!/usr/bin/env python3
 """
 Distance calculation functions for MBTAccess app
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 import argparse
 import json
 import os
 import urllib.request as request
 from argparse import RawDescriptionHelpFormatter
-from math import sin, cos, pow, sqrt, pi, asin
+from math import asin, cos, pi, pow, sin, sqrt
+from urllib.error import HTTPError
+
+
+class BadUrlError(Exception):
+    """Raise exception if given URL could not be opened"""
+    pass
+
+
+class MBTAResponseError(Exception):
+    """Raise exception if MBTA returns an error"""
+    pass
 
 
 def get_distance(point1, point2):
@@ -57,12 +69,19 @@ def get_stops(url):
     :return: Returns a list of dictionary objects.
     """
     rqst = request.Request(url)
-    response = request.urlopen(rqst)
+    try:
+        response = request.urlopen(rqst)
+    except HTTPError:
+        msg = "The provided URL {u} is not a correct MBTA data URL.".format(u=url)
+        raise BadUrlError(msg) from None
     if response.status == 200:
-        data = json.loads(response.read())
+        contents = response.read()
+        if not isinstance(contents, str):
+            contents = contents.decode('utf8')
+        data = json.loads(contents)
         return data.get('data')
-    msg = "The HTTP request to ${u} failed with reason ${r}."
-    raise Exception(msg.format(u=url, r=response.reason))
+    msg = "The HTTP request to {u} failed with reason {r}."
+    raise MBTAResponseError(msg.format(u=url, r=response.reason))
 
 
 def process_schools(schools_data, url):
@@ -76,7 +95,8 @@ def process_schools(schools_data, url):
     """
     if not os.path.exists(schools_data):
         raise Exception("Can't process a file that does not exist.")
-    schools = json.loads(open(schools_data).read())
+    with open(schools_data) as f:
+        schools = json.load(f)
     stops = get_stops(url)
     new_schools = []
     for school in schools:
