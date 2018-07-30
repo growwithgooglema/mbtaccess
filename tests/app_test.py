@@ -1,5 +1,6 @@
 """
-Unit test module for the Flask application
+Unit test module for the Flask application in app.py
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 import json
 import os
@@ -20,30 +21,21 @@ else:
 
 
 class AppTest(unittest.TestCase):
-    """
-    Test all endpoints of the application. It assumes
-    that the local database tables have already been populated.
-    """
+    """Test all app endpoints. Assumes local database tables have been populated."""
+
     def setUp(self):
-        """
-        Set up some test variables
-        """
+        """Set up test variables"""
         app.app_context().push()
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = db_url
         self.client = app.test_client()
-    
+
     def tearDown(self):
-        """
-        Close the database connection and pop the app client
-        """
+        """Close the database connection and pop the app client"""
         db.session.close()
-    
+
     def test_codes(self):
-        """
-        Test the status codes the application returns
-        for the given endpoints.
-        """
+        """Test status codes for app endpoints"""
         endpoints = {
             'index.html': 404,
             '/': 200,
@@ -57,11 +49,9 @@ class AppTest(unittest.TestCase):
         for e, exp in endpoints.items():
             with self.subTest("Testing endpoint {e}".format(e=e), end=e, expect=exp):
                 self.assertEqual(self.client.get(e).status_code, exp)
-    
+
     def test_stop(self):
-        """
-        Test the stop endpoint for the given MBTA stop IDs
-        """
+        """Test stop endpoints for the given MBTA stop IDs"""
         endpoints = {
             '/stop/bad': 'bad',
             '/stop/2': 'good',
@@ -72,12 +62,9 @@ class AppTest(unittest.TestCase):
             with self.subTest("Testing API endpoint {e}".format(e=e), end=e, expect=exp):
                 data = json.loads(self.client.get(e).data.decode('utf8'))
                 self.assertEqual(data.get('status'), exp)
-    
+
     def test_stops(self):
-        """
-        Test the stops endpoint, which expects
-        query strings.
-        """
+        """Test the stops endpoint, which expects query strings."""
         endpoints = {
             '/stops?lat=42.35947&lon=-71.09296': 'good',
             '/stops?lat=bad&lon=bad': 'bad',

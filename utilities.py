@@ -1,27 +1,24 @@
 #!/usr/bin/env python3
 """
 Distance calculation functions for MBTAccess app
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 import argparse
 import json
 import os
 import urllib.request as request
 from argparse import RawDescriptionHelpFormatter
-from math import sin, cos, pow, sqrt, pi, asin
+from math import asin, cos, pi, pow, sin, sqrt
 from urllib.error import HTTPError
 
 
 class BadUrlError(Exception):
-    """
-    Exception is raised if a given URL could not be opened
-    """
+    """Raise exception if given URL could not be opened"""
     pass
 
 
 class MBTAResponseError(Exception):
-    """
-    Exception is raised if the issue stems from the MBTA
-    """
+    """Raise exception if MBTA returns an error"""
     pass
 
 

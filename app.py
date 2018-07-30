@@ -14,7 +14,9 @@ app = Flask(__name__)
 if os.environ.get('DBASE_URL'):
     db_url = os.environ.get('DBASE_URL')
 else:
-    db_url = "sqlite:///{p}".format(p=os.path.join(os.path.dirname(__file__), "test_database.sqlite"))
+    db_url = "sqlite:///{p}".format(
+        p=os.path.join(os.path.dirname(__file__), "test_database.sqlite")
+    )
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
@@ -71,7 +73,8 @@ def get_stops():
             if len(missing) == 1:
                 message += ' {m} is missing from the query string.'.format(m=" and ".join(missing))
             else:
-                message += ' Both {m} are missing from the query string.'.format(m=" and ".join(missing))
+                message += ' Both {m} are missing from the query string.'.format(
+                    m=" and ".join(missing))
         message += ' Make sure you\'re using the query stops?lat=value&lon=value.'
         message += ' Also, the values should be floating point values.'
         return jsonify(**{

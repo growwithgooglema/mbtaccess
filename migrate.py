@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
 Migration script to load data models from models.py into database tables
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
-
 import os
 from flask import Flask
 
@@ -10,14 +10,14 @@ from models import db, Stop
 
 
 def main():
-    """
-    Loads the Stop data model to a database table
-    """
+    """Load Stop data model to a database table"""
     app = Flask(__name__)
     if os.environ.get('DBASE_URL'):
         db_url = os.environ.get('DBASE_URL')
     else:
-        db_url = "sqlite:///{p}".format(p=os.path.join(os.path.dirname(__file__), "test_database.sqlite"))
+        db_url = "sqlite:///{p}".format(
+            p=os.path.join(os.path.dirname(__file__), "test_database.sqlite")
+        )
     app.config['SQLALCHEMY_DATABASE_URI'] = db_url
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
