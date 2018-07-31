@@ -56,3 +56,5 @@ Add any other context about the problem here.
 ## Suggestions
 
 Suggest changes to fix the bug.
+
+- [ ] I have reviewed the [Guidelines for Contributing](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
