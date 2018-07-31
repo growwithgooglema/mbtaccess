@@ -62,11 +62,10 @@ The Flask application should run within a virtual environment. Python 3 is bundl
 
     ```sh
     cd mbtaccess
-    # 1. install virtual env
+    # 1. install and activate virtual env
     python3 -m venv venv
-    # 2. activate virtual env
     . venv/bin/activate
-    # install modules listed in requirements.txt
+    # 2. install modules
     (venv) <path> $ pip install -r requirements.txt
     # 3. set up database once
     (venv) <path> $ python migrate.py
