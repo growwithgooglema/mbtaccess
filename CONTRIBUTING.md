@@ -2,16 +2,20 @@
 
 ## Table of Contents <!-- omit in toc -->
 
-- [Instructions](#instructions)
-  - [Suggest a project](#suggest-a-project)
-  - [Get started with Git and GitHub](#get-started-with-git-and-github)
-  - [Clone or fork](#clone-or-fork)
-  - [Branch](#branch)
-  - [Commit](#commit)
-  - [Push](#push)
-  - [Pull requests](#pull-requests)
+- [Suggest a project](#suggest-a-project)
+- [Get started with Git and GitHub](#get-started-with-git-and-github)
+- [Clone or fork](#clone-or-fork)
+- [Branch](#branch)
+- [Commit](#commit)
+  - [Best practices for commits](#best-practices-for-commits)
+- [Push](#push)
+- [Pull requests](#pull-requests)
+  - [Best practices for pull requests](#best-practices-for-pull-requests)
+  - [Reviewing and merging pull requests](#reviewing-and-merging-pull-requests)
+- [Collaboration tools](#collaboration-tools)
   - [GitHub collaboration features](#github-collaboration-features)
   - [GPG](#gpg)
+  - [Slack](#slack)
 - [Code style](#code-style)
   - [Python](#python)
   - [JavaScript](#javascript)
@@ -20,11 +24,9 @@
 - [Text editor setup](#text-editor-setup)
   - [vscode](#vscode)
 
-## Instructions
+## Suggest a project
 
 To initiate a collaborative project, please do the following:
-
-### Suggest a project
 
 - Create a markdown file and save with extension ".md".
   - Check out these resources if you are unfamiliar with Markdown:
@@ -33,7 +35,7 @@ To initiate a collaborative project, please do the following:
     - [Markdown reference guide from @br3ndonland](https://github.com/br3ndonland/udacity-google/blob/master/markdown-guide.md)
 - Add your project ideas and their specifications to the Markdown file and save.
 
-### Get started with Git and GitHub
+## Get started with Git and GitHub
 
 - Sign up for [GitHub](https://github.com) if you haven't already.
 - Join the [Grow with Google - New England GitHub organization](https://github.com/growwithgooglema).
@@ -51,9 +53,8 @@ To initiate a collaborative project, please do the following:
 - Git and GitHub resources:
   - [Git docs](https://git-scm.com/)
   - [GitHub & Collaboration](https://www.udacity.com/course/github-collaboration--ud456) Udacity course
-  - [Quick reference guide to Git and GitHub from @br3ndonland](https://github.com/br3ndonland/general/blob/master/guide-git.md)
 
-### Clone or fork
+## Clone or fork
 
 - Fork vs. clone: A **clone** is a copy of a repository on your computer. A **[fork](https://help.github.com/articles/fork-a-repo/)** duplicates the project into the user's GitHub account, and still maintains connection to the original master. Forks can also be cloned. **If you are not a repository owner, you will not be able to push to the original repository.** Fork the repository on GitHub instead of directly cloning. Changes to forks can be merged into the `upstream master` with pull requests.
 - Clone the repository from the GitHub fork to your computer.
@@ -62,12 +63,12 @@ To initiate a collaborative project, please do the following:
 
     ```sh
     cd <PATH-WHERE-YOU-WANT-THE-REPO>
-    git clone git@github.com:growwithgooglema/projects.git
+    git clone git@github.com:growwithgooglema/mbtaccess.git
     ```
 
-### Branch
+## Branch
 
-- We use two long-running branches, `master` and `dev`. **The only commits made to `master` and `dev` should be merge commits from feature branches**
+- We use two long-running branches, `master` and `dev`. **The only commits made to `master` and `dev` should be merge commits from feature branches.**
 - Changes are made on temporary feature branches and merged into `dev` with [pull requests](#pull-requests).
 - Create a branch to isolate changes from the `master` or `dev` branches.
   - Use a clear, descriptive name for your branch.
@@ -80,7 +81,7 @@ To initiate a collaborative project, please do the following:
 
 - **Pull with rebase** to keep branches and forks in sync. Bring in changes from GitHub with `git pull --rebase origin branchname`. This provides a nice linear commit history without unnecessary merge commits.
 
-### Commit
+## Commit
 
 - After saving files, changes need to be committed to the Git repository.
   - GitHub Desktop provides a user interface to make this easy.
@@ -91,7 +92,7 @@ To initiate a collaborative project, please do the following:
     git commit
     ```
 
-#### Best practices for commits
+### Best practices for commits
 
 **Make meaningful, cohesive, focused commits.** Commit when an objective has been completed, or before a major change is made. Break changes up into topics so the maintainer can easily accept or reject changes from a pull request.
 
@@ -112,17 +113,17 @@ Imperative commit title limited to 50 characters
 More detailed commit message body with lines wrapped at 72 characters
 ```
 
-### Push
+## Push
 
 **Please push to a fork or feature branch and submit a pull request. Please do not push directly to `dev` or `master`.** It is best to reserve the `master` branch for just one cohesive version of the app that always works.
 
-### Pull requests
+## Pull requests
 
 - A pull request asks the owner of the master repository to merge changes from the requester's branch or fork to the master repository. See [About pull requests on GitHub](https://help.github.com/articles/about-pull-requests/).
 - Click "New pull request" on the master repository's GitHub page.
 - If you forked the repository, click "Compare across forks." The base fork is the location in the master repository where the changes will go. The head fork is your fork where the changes are located.
 
-#### Best practices for pull requests
+### Best practices for pull requests
 
 - **Submit pull requests for review by other team members.** Even if you have access to the master, making a pull request for a merge from `dev` to `master`, and requesting review, helps keep team members accountable and helps prevent merge conflicts and breaking of functionality.
 - **Create pull requests from feature branches.** Creating branches like `dev` and feature or topic branches, and submitting pull requests from a branch, helps keep the master repository organized.
@@ -130,16 +131,19 @@ More detailed commit message body with lines wrapped at 72 characters
   - List changes with bullet points.
   - Reference other pull requests that may be superseded by this request.
 
-#### Reviewing and merging pull requests
+### Reviewing and merging pull requests
 
 - We use **pull request reviews** to discuss the code with other contributors.
 - After a team member has discussed, reviewed, and approved the pull request, they should merge it from the feature branch into `dev`.
+
+## Collaboration tools
 
 ### GitHub collaboration features
 
 - **Teams**: We use [teams](https://help.github.com/articles/about-teams/) for specific  initiatives within the organization. For example, the [MBTAccess team](https://github.com/orgs/growwithgooglema/teams/mbtaccess) is part of the *growwithgooglema organization*. We can add the organization's repos to it, such as the *mbtaccess repo*. The team provides more features, like a **discussion board.**
 - **Issues**: We use [issues](https://help.github.com/articles/about-issues/) in addition to pull requests to assign work and plan new features.
 - **Projects**: [Projects](https://help.github.com/articles/about-project-boards/) help us organize issues and pull requests. An issue can be part of multiple projects.
+- **Pull request reviews** are very helpful.
 
 ### GPG
 
@@ -160,6 +164,10 @@ More detailed commit message body with lines wrapped at 72 characters
   - Configure Git to use your key for local commits with `git config --global user.signingkey <keynumber>`
   - Export your GPG public key with `gpg --armor --export <keynumber>`
   - Copy the GPG public key and paste into GitHub in the settings menu.
+
+### Slack
+
+We use our [Grow with Google Slack workspace](https://gwgnanodegrees.slack.com/) for planning meetings and other informal messaging.
 
 ---
 
