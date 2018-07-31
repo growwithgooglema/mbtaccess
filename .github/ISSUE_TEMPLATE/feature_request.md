@@ -31,4 +31,4 @@ A clear and concise description of any alternative solutions or features you've 
 
 This issue addresses # <!-- Reference related issues and pull requests. Type `#` and select from the list. -->.
 
-- [ ] I have reviewed the [Guidelines for Contributing](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
+- [ ] I have reviewed the [Guidelines for Contributing](https://github.com/growwithgooglema/mbtaccess/blob/dev/CONTRIBUTING.md) and the [Code of Conduct](https://github.com/growwithgooglema/mbtaccess/blob/dev/CODE_OF_CONDUCT.md).
