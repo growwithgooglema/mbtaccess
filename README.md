@@ -2,17 +2,20 @@
 
 [Grow with Google - New England](https://github.com/growwithgooglema) collaborative project
 
+[![license](https://img.shields.io/badge/license-MIT-blue.svg?longCache=true&style=for-the-badge)](https://choosealicense.com/)
+
 [![Travis (.org)](https://img.shields.io/travis/growwithgooglema/mbtaccess.svg?longCache=true&style=for-the-badge)](https://travis-ci.org/growwithgooglema/mbtaccess)
 
-## Table of Contents
+## Table of Contents <!-- omit in toc -->
 
-- [Table of Contents](#table-of-contents)
 - [Description](#description)
 - [Contributing](#contributing)
 - [Application stack](#application-stack)
+  - [Front-end](#front-end)
   - [Flask](#flask)
   - [Docker](#docker)
-  - [Front-end](#front-end)
+  - [Testing](#testing)
+  - [Continuous Integration](#continuous-integration)
 - [Maintainers](#maintainers)
 
 ## Description
@@ -25,52 +28,71 @@ MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provid
 
 ## Contributing
 
-- This is a collaborative open-source project by members of @growwithgooglema/mbtaccess.
-- We have a [team discussion board](https://github.com/orgs/growwithgooglema/teams/mbtaccess).
-- Please behave according to the [Code of Conduct](CODE_OF_CONDUCT.md).
-- Please review the [instructions for contributing](CONTRIBUTING.md).
-- We are developing on the `dev` branch.
+- **Please review the [instructions for contributing](CONTRIBUTING.md).**
+- **Please behave according to the [Code of Conduct](CODE_OF_CONDUCT.md).**
+- This is a collaborative open-source project by members of @growwithgooglema/mbtaccess. We have a [team discussion board](https://github.com/orgs/growwithgooglema/teams/mbtaccess) where we post announcements and meeting notes.
 
 ## Application stack
+
+### Front-end
+
+- The application pages are styled with [Bootstrap 4](https://getbootstrap.com), a library of HTML, CSS, and JavaScript components.
+- Markdown documents in the repository have been formatted in a standard style, based on suggestions from [vscode-markdownlint](https://github.com/DavidAnson/vscode-markdownlint).
 
 ### Flask
 
 #### Flask summary
 
 - The application originally fetched JSON data directly from the MBTA API, and then used client-side JavaScript to iterate over the stops and drop map pins for stops near the user.
-- After experiencing slow speeds, we rebuilt our app with [Python 3](https://docs.python.org/3/) and the Python framework [Flask](http://flask.pocoo.org/). Instead of fetching data directly from MBTA, we store data in our own back-end database API. We then perform the calculations with Python and structure the application with Flask. Python code has been formatted according to the [PEP 8](http://pep8.org/) specification, with line length extended to 120 characters.
+- After experiencing slow speeds, we rebuilt our app with [Python 3](https://docs.python.org/3/) and the Python framework [Flask](http://flask.pocoo.org/). Instead of fetching data directly from MBTA, we store data in our own back-end database API. We then perform the calculations with Python and structure the application with Flask. Python code has been formatted according to the [PEP 8](http://pep8.org/) specification, with line length extended to 100 characters.
 - [utilities.py](utilities.py) contains distance calculation functions. The `get_distance` function uses the [Haversine formula](https://rosettacode.org/wiki/Haversine_formula#Python) to calculate the distance between two points, such as between the user's location and an MBTA stop.
-- models.py
+- [models.py](models.py) sets up the data model for the MBTA stop data.
 - [migrate.py](migrate.py) creates a database, fetches data from the MBTA API, and stores it in the database.
 - [app.py](app.py) contains the main Flask application code. This file controls the app, with Flask routing functions to render the pages of the web application and access app content. The database is accessed by [SQLAlchemy](http://www.sqlalchemy.org/) from within [app.py](app.py).
+- App pages are templated and stored in the [templates](templates) directory. Code common to all application pages is stored in `{% include %}`, and code unique to each page is stored in `{% block %}` content.
 
 #### Running Flask
 
-The application should run within a virtual environment. Python 3 is bundled with the `venv` module for creation of virtual environments.
+The Flask application should run within a virtual environment. Python 3 is bundled with the `venv` module for creation of virtual environments.
 
-1. **Install Python virtual environment and requirements**: The following shell commands will create a Python virtual environment, activate the virtual environment and display a modified virtual environment prompt, and install required modules listed in requirements.txt.
+1. **Install and activate Python virtual environment**: The shell commands in the code block below will create a Python virtual environment, activate the virtual environment and display a modified virtual environment prompt
+2. **Install required Python modules into the virtual environment**: Use `pip` to install required modules listed in *requirements.txt*. The modules will be installed locally within the virtual environment. The *requirements.txt* file was generated by running `pip freeze > requirements.txt`.
+3. **Set up database**: Run `python migrate.py` from within the virtual environment. This needs to be run only once to populate the `mbta_stops` table in the SQLite database.
+4. **Start application**: Run `python app.py` or `python -m flask run` from within the virtual environment. Flask will start a local web server.
 
     ```sh
     cd mbtaccess
+    # 1. install virtual env
     python3 -m venv venv
-    # activate virtual env
+    # 2. activate virtual env
     . venv/bin/activate
     # install modules listed in requirements.txt
-    (venv) <PATH> pip install -r requirements.txt
+    (venv) <path> $ pip install -r requirements.txt
+    # 3. set up database once
+    (venv) <path> $ python migrate.py
+    # 4. run app
+    (venv) <path> $ python app.py
     ```
 
-2. **Set up database**: Run `python migrate.py` from within the virtual environment. This needs to be run only once to populate the `mbta_stops` table in a DB called `test_database.sqlite`.
-3. **Start application**: Run `python app.py` from within the virtual environment. Flask will start a local web server.
+    - [Using Flask in VS Code](https://code.visualstudio.com/docs/python/tutorial-flask):
+      - *Command Palette -> Python: Select Interpreter*. Select virtual environment.
+      - *Command Palette -> Python: Create Terminal*. Creates a terminal and automatically activates the virtual environment. Using the Python: Create Terminal command is preferred. Simply creating a new terminal window will not activate the virtual environment.
     - Flask, by default, will bind the application to port 5000. If you wish to change this, you can export an `APP_PORT` environment variable and call the script:
 
       ```py
       export APP_PORT=7000 && python app.py
       ```
 
-4. **Test the back-end API locally**: In a web browser, navigate to [http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296](http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296) to see the data returned from the API. If you're adventurous, change the values for `lat` and `lon` in the query string to see new results.
+5. **Test the back-end API locally**: In a web browser, navigate to [http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296](http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296) to see the data returned from the API. If you're adventurous, change the values for `lat` and `lon` in the query string to see new results.
     - The API endpoints have not yet been hosted anywhere. The only way to test them is to run the application locally.
     - The goal is to deploy the API endpoints to Google Cloud.
-5. **Test the app pages locally**: Navigate to [index.html](http://127.0.0.1:5000) and [universities.html](http://127.0.0.1:5000/universities.html)
+6. **Test the app pages locally**: Navigate to [index.html](http://127.0.0.1:5000) and [universities.html](http://127.0.0.1:5000/universities)
+
+<!--
+### Elasticsearch
+
+*TODO*
+-->
 
 ### Docker
 
@@ -94,10 +116,34 @@ The application is assembled into a Docker container, and is available as a cont
 
 3. **Run application**: To check if the application is running correctly, open a web browser and navigate to [http://localhost:80](http://localhost:80).
 
-### Front-end
+### Testing
 
-- The application pages are styled with [Bootstrap 4](https://getbootstrap.com), a library of HTML, CSS, and JavaScript components.
-- Markdown documents in the repository have been formatted in a standard style, based on suggestions from [vscode-markdownlint](https://github.com/DavidAnson/vscode-markdownlint).
+- We use Python's `unittest` module for unit testing.
+- [Python unit testing in VS Code](https://code.visualstudio.com/docs/python/unit-testing):
+  - Use `unittest` settings in *.vscode/settings.json*
+  - *Command Palette -> Run All Unit Tests*. The result will show up in the status bar.
+  - *Command Palette -> View Test Results*.
+  - View results in the output panel (Cmd+shift+u).
+  - Individual tests can also be run. A popup will show above each test unit in the test module file.
+- Unit testing Python from the command line:
+
+  ```sh
+  # activate virtual env
+  . venv/bin/activate
+  # Discover and run tests
+  (venv) <path> $ python -W ignore -m unittest discover -vv -s tests -p "*test.py"
+  ```
+
+  - This calls python with the following twists:
+
+    1. `-W ignore`: Tells the python interpreter to ignore `warnings` since those are written to the standard error and can act like errors, when they're usually just deprecation warnings.
+    2. `-m unittest`: Tells the python interpreter to import the `unittest` module
+    3. `discover -vv -s tests -p "*test.py"`: Tells the `unittest` module to discover and run test cases (with a verbosity level of 2) located within the `tests` directory inside python files with the pattern `"*test.py"`
+
+### Continuous Integration
+
+- Tests are run automatically on the GitHub repo by Continuous Integration (CI).
+- We use [Travis CI](https://travis-ci.org). Build information is available on the [MBTAccess Travis CI page](https://travis-ci.org/growwithgooglema/mbtaccess).
 
 <!--
 TODO update the file list after rebuilding the app with Flask
@@ -139,15 +185,10 @@ TODO update the file list after rebuilding the app with Flask
 
 - [@AbdouSeck](https://github.com/AbdouSeck)
   - **Chief Data Wrangler**
-  - **Friendly DevOps**
   - **Location Services**
 - [@br3ndonland](https://github.com/br3ndonland)
   - **Nominated Benevolent Dictator**
   - **Dr. Documentation**
-  - **Master of Markdown**
 - [@jethridge13](https://github.com/jethridge13)
   - **Cartesian Contributor**
   - **Interstate Transportation Logistics**
-- [@KonradSchieban](https://github.com/KonradSchieban)
-  - **Cloudmaster**
-  - **The Dockerizer**
