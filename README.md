@@ -85,7 +85,7 @@ The Flask application should run within a virtual environment. Python 3 is bundl
 5. **Test the back-end API locally**: In a web browser, navigate to [http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296](http://127.0.0.1:5000/stops?lat=42.35947&lon=-71.09296) to see the data returned from the API. If you're adventurous, change the values for `lat` and `lon` in the query string to see new results.
     - The API endpoints have not yet been hosted anywhere. The only way to test them is to run the application locally.
     - The goal is to deploy the API endpoints to Google Cloud.
-6. **Test the app pages locally**: Navigate to [index.html](http://127.0.0.1:5000) and [universities.html](http://127.0.0.1:5000/universities)
+6. **Test the app pages locally**: Navigate to [the map page](http://127.0.0.1:5000) and [the universities page](http://127.0.0.1:5000/universities)
 
 <!--
 ### Elasticsearch
