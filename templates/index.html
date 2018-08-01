@@ -18,12 +18,4 @@
   <!-- Google Maps JavaScript: Only load on map page -->
   <script type="text/javascript" src="static/js/google-maps.js"></script>
   <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY&libraries=places&callback=initMap"></script>
-  <script>
-    document.onreadystatechange = function () {
-      if (document.readyState === "complete") {
-        map.setCenter(new google.maps.LatLng(42.360091, -71.09416));
-        map.setZoom(13);
-      }
-    }
-  </script>
 {% endblock %}
