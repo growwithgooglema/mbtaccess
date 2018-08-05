@@ -16,13 +16,45 @@ async function initMap () {
         lat: position.coords.latitude,
         lng: position.coords.longitude
       }
+      let marker = new google.maps.Marker({
+        map: map,
+        position: pos,
+        label: '★'
+      })
       map.setCenter(pos)
       infoWindow.setPosition(pos)
       infoWindow.setContent('You')
-      infoWindow.open(map)
+      infoWindow.open(map, marker)
       const query = fetch(`http://localhost:5000/stops?lat=${pos.lat}&lon=${pos.lng}`)
       const data = await (await query).json()
       const stops = data.stops
+      // Create markers and set infoWindow content for each marker
+      const markersArray = []
+      const createMarkers = stops.forEach(stop => {
+        let marker = new google.maps.Marker({
+          map: map,
+          position: {lat: stop.latitude, lng: stop.longitude},
+          name: `${stop.name}`,
+          googleUrl: `https://www.google.com/maps/dir/?api=1&origin=${pos.lat},${pos.lng}&destination=${stop.latitude},${stop.longitude}&travelmode=walking`,
+          animation: google.maps.Animation.DROP,
+          clickMarker: marker => google.maps.event.trigger(marker, 'click')
+        })
+        marker.addListener('click', () => {
+          marker.setAnimation(google.maps.Animation.BOUNCE)
+          setTimeout(() => marker.setAnimation(null), 1000)
+          infoWindow.setContent(
+            `<div id="info-window-content">
+              <header>
+                <strong>${stop.name}</strong>
+              </header>
+              <div><a href="${marker.googleUrl}">View on Google Maps</a></div>
+            </div>`)
+          infoWindow.open(map, marker)
+        })
+        bounds.extend(marker.position)
+        map.fitBounds(bounds)
+        markersArray.push(marker)
+      })
       console.log('Successfully geolocated user.')
       console.log(`Geolocation:`, pos, `\nStops:`, stops)
     }
