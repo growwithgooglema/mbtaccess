@@ -1,11 +1,13 @@
 {% extends 'layout.html' %}
 {% block content %}
-<div class="center">
-  <table id="universities" class="display compact"></table>
-</div>
+  <!-- Map -->
+  <div id="map"></div>
+  <!-- Universities table -->
+  <div class="container">
+    <div class="table-responsive" id="universities-table"></div>
+  </div>
 {% endblock %}
 {% block script %}
-  <!-- Scripts for this page -->
-  <!-- Universities JavaScript: Only load on universities page -->
   <script src="static/js/universities.js"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY&callback=initMap"></script>
 {% endblock %}
