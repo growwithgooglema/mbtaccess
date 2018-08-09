@@ -1,3 +1,3 @@
 // Calculate current year for footer
-var currentYear = new Date().getFullYear()
-$('#copyright').html(`&copy; ${currentYear}`)
+const currentYear = new Date().getFullYear()
+document.getElementById('copyright').textContent = `© ${currentYear}`
