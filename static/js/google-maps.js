@@ -1,67 +1,127 @@
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MBTAccess map ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MBTAccess map ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 async function initMap () {
   try {
-// Initialize Google Map
-  const boston = {lat: 42.360091, lng: -71.09416}
-  const map = new google.maps.Map(document.getElementById('map'), {
-    center: boston,
-    zoom: 13
-  })
-  const bounds = new google.maps.LatLngBounds()
-  google.maps.event.addDomListener(window, 'resize', () => map.fitBounds(bounds))
+    let navLink = document.getElementById('nav-link-index')
+    navLink.className = 'nav-link active'
+    // Initialize Google Map
+    const boston = {lat: 42.360091, lng: -71.09416}
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: boston,
+      zoom: 13
+    })
+    const bounds = new google.maps.LatLngBounds()
+    google.maps.event.addDomListener(window, 'resize', () => map.fitBounds(bounds))
     const infoWindow = new google.maps.InfoWindow()
-    // Handle geolocation success and failure
-    const success = async position => {
-      const pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      }
+    const showStops = async location => {
+      // Create map marker and infoWindow at location
       let marker = new google.maps.Marker({
         map: map,
-        position: pos,
+        position: location,
         label: '★'
       })
-      map.setCenter(pos)
-      infoWindow.setPosition(pos)
-      infoWindow.setContent('You')
+      map.setCenter(location)
+      infoWindow.setPosition(location)
+      infoWindow.setContent(location.name)
       infoWindow.open(map, marker)
-      const query = fetch(`http://localhost:5000/stops?lat=${pos.lat}&lon=${pos.lng}`)
+      // Fetch stops near location from database
+      const query = fetch(`http://localhost:5000/stops?lat=${location.lat}&lon=${location.lng}`)
       const data = await (await query).json()
       const stops = data.stops
-      // Create markers and set infoWindow content for each marker
+      // Create table that will be populated with stops
+      const tableDiv = document.getElementById('stops-table')
+      const tableTitle = document.createElement('h2')
+      tableTitle.className = 'lead'
+      tableTitle.textContent = 'Stop list'
+      tableDiv.appendChild(tableTitle)
+      const table = document.createElement('table')
+      table.className = 'table table-sm table-striped'
+      tableDiv.appendChild(table)
+      const thead = document.createElement('thead')
+      thead.className = 'thead-light'
+      table.appendChild(thead)
+      const theadRow = document.createElement('tr')
+      thead.appendChild(theadRow)
+      const thNum = document.createElement('th')
+      thNum.textContent = '#'
+      thNum.scope = 'col'
+      theadRow.appendChild(thNum)
+      const thName = document.createElement('th')
+      thName.textContent = 'Name'
+      thName.scope = 'col'
+      theadRow.appendChild(thName)
+      const tbody = document.createElement('tbody')
+      table.appendChild(tbody)
+      // Create markers, infoWindow content, and table rows for each stop
       const markersArray = []
-      const createMarkers = stops.forEach(stop => {
+      stops.forEach((stop, i) => {
+        // Set stop attributes
+        let googleUrl = `https://www.google.com/maps/dir/?api=1&origin=${location.lat},${location.lng}&destination=${stop.latitude},${stop.longitude}&travelmode=walking`
+        let stopLocation = {lat: stop.latitude, lng: stop.longitude}
+        let number = `${i + 1}`
+        let name = stop.name
+        // Create markers
         let marker = new google.maps.Marker({
           map: map,
-          position: {lat: stop.latitude, lng: stop.longitude},
-          name: `${stop.name}`,
-          googleUrl: `https://www.google.com/maps/dir/?api=1&origin=${pos.lat},${pos.lng}&destination=${stop.latitude},${stop.longitude}&travelmode=walking`,
-          animation: google.maps.Animation.DROP,
-          clickMarker: marker => google.maps.event.trigger(marker, 'click')
+          position: stopLocation,
+          animation: google.maps.Animation.DROP
         })
+        // Set infoWindow content
         marker.addListener('click', () => {
           marker.setAnimation(google.maps.Animation.BOUNCE)
           setTimeout(() => marker.setAnimation(null), 1000)
           infoWindow.setContent(
             `<div id="info-window-content">
               <header>
-                <strong>${stop.name}</strong>
+                <strong>${number}. ${name}</strong>
               </header>
-              <div><a href="${marker.googleUrl}">View on Google Maps</a></div>
+              <div><a href="${googleUrl}">View on Google Maps</a></div>
             </div>`)
           infoWindow.open(map, marker)
         })
+        markersArray.push(marker)
+        // Adjust map to fit markers
         bounds.extend(marker.position)
         map.fitBounds(bounds)
-        markersArray.push(marker)
+        // Fill table with stop data
+        let stopRow = document.createElement('tr')
+        tbody.appendChild(stopRow)
+        let stopRowNum = document.createElement('th')
+        stopRowNum.scope = 'row'
+        stopRowNum.textContent = number
+        stopRow.appendChild(stopRowNum)
+        let stopRowName = document.createElement('td')
+        if (stop.platform_name) {
+          stopRowName.innerHTML = `<a href="${googleUrl}">${name}</a><p>${stop.platform_name}</p>`
+        } else {
+          stopRowName.innerHTML = `<a href="${googleUrl}">${name}</a>`
+        }
+        stopRow.appendChild(stopRowName)
       })
-      console.log('Successfully geolocated user.')
-      console.log(`Geolocation:`, pos, `\nStops:`, stops)
+      console.log(`Stops:`, stops)
     }
-    const error = e => console.warn(`ERROR (${e.code}): ${e.message}`)
+    // Handle geolocation success and failure
+    const success = position => {
+      let location = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        name: 'You'
+      }
+      console.log(`Successfully geolocated user.\nGeolocation:`, position)
+      showStops(location)
+    }
+    const failure = e => console.warn(`ERROR (${e.code}): ${e.message}`)
     // Geolocate user
-    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(success, error)
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, failure)
+    } else {
+      console.log('Geolocation not available in browser.')
+    }
+    /*
+    TODO: Search input from search box
+    document.querySelector('form').addEventListener('submit', event => {
+      // TODO: Maybe use Elasticsearch to return instant results as the user types
     })
+   */
   } catch (e) {
     throw Error(e)
   }

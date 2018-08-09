@@ -1,16 +1,7 @@
-html, body, main, .container {
-  height: 90%;
+html, body {
+  height: 100%;
 }
 #map {
   height: 100%;
-}
-#universities {
-  height: 80%;
-  font-size: 0.8rem;
-}
-.center {
-  margin: auto;
-  width: 80%;
-  padding: 0px;
-  border: 0px;
+  box-sizing: content-box;
 }

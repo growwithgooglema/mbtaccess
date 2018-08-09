@@ -4,18 +4,19 @@
   <div class="p-1">
     <form class="form-inline" id="searchform">
       <fieldset id="searchbox">
-        <input id="searchtxt" class="form-control" type="search" placeholder="My Location" aria-label="Search">
+        <input id="searchtxt" class="form-control" type="search" placeholder="TODO: Elasticsearch" aria-label="Search">
       </fieldset>
       <button id="searchbtn" class="btn btn-primary my-1">Search</button>
     </form>
   </div>
   <!-- Map -->
   <div id="map"></div>
-  <table id="stops" class="display compact"></table>
+  <!-- Stops table -->
+  <div class="container">
+    <div class="table-responsive" id="stops-table"></div>
+  </div>
 {% endblock %}
 {% block script %}
-  <!-- Scripts for this page -->
-  <!-- Google Maps JavaScript: Only load on map page -->
   <script src="static/js/google-maps.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY&libraries=places&callback=initMap"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY&callback=initMap"></script>
 {% endblock %}
