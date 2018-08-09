@@ -38,6 +38,7 @@ MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provid
 
 - The application pages are styled with [Bootstrap 4](https://getbootstrap.com), a library of HTML, CSS, and JavaScript components.
 - Markdown documents in the repository have been formatted in a standard style, based on suggestions from [vscode-markdownlint](https://github.com/DavidAnson/vscode-markdownlint).
+- The icon is from [Google Material Design](https://material.io/tools/icons) and is available under [Apache license version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
 
 ### Flask
 
