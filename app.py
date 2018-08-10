@@ -28,6 +28,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/about')
+def about():
+    """App route function for about page."""
+    return render_template('about.html')
+
+
 @app.route('/universities')
 def universities():
     """App route function for universities page."""

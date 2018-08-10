@@ -11,10 +11,13 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('index') }}">Interactive Map</a>
+            <a class="nav-link" id="nav-link-index" href="{{ url_for('index') }}">Find stops</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('universities') }}">University Ranking</a>
+            <a class="nav-link" id="nav-link-universities" href="{{ url_for('universities') }}">University List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="nav-link-about" href="{{ url_for('about') }}">About</a>
           </li>
         </ul>
       </div>

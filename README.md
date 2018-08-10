@@ -44,6 +44,13 @@ MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provid
 
 #### Flask summary
 
+- The application fetches data from the [MBTA V3 API](https://api-v3.mbta.com/).
+  - The API conforms to the [General Transit Feed Specification](http://gtfs.org/).
+  - The `wheelchair_boarding` attribute can have a value of `0`, `1`, or `2`.
+    - 0: No information
+    - 1: Accessible
+    - 2: Inaccessible
+  - See the [MBTA V3 API documentation](https://api-v3.mbta.com/docs/swagger/index.html) for further information.
 - The application originally fetched JSON data directly from the MBTA API, and then used client-side JavaScript to iterate over the stops and drop map pins for stops near the user.
 - After experiencing slow speeds, we rebuilt our app with [Python 3](https://docs.python.org/3/) and the Python framework [Flask](http://flask.pocoo.org/). Instead of fetching data directly from MBTA, we store data in our own back-end database API. We then perform the calculations with Python and structure the application with Flask. Python code has been formatted according to the [PEP 8](http://pep8.org/) specification, with line length extended to 100 characters.
 - [utilities.py](utilities.py) contains distance calculation functions. The `get_distance` function uses the [Haversine formula](https://rosettacode.org/wiki/Haversine_formula#Python) to calculate the distance between two points, such as between the user's location and an MBTA stop.
