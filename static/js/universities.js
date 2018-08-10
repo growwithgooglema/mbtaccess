@@ -42,7 +42,7 @@ async function initMap () {
     thStopTotal.scope = 'col'
     theadRow.appendChild(thStopTotal)
     const thStopWheelchair = document.createElement('th')
-    thStopWheelchair.textContent = 'Accessible'
+    thStopWheelchair.innerHTML = '<img src="static/img/baseline_accessible_black_36dp.png" alt="Accessible stops">'
     thStopWheelchair.scope = 'col'
     theadRow.appendChild(thStopWheelchair)
     const thStopRatio = document.createElement('th')
@@ -61,7 +61,7 @@ async function initMap () {
       let googleUrl = `https://www.google.com/maps/search/?api=1&query=${name.toLowerCase().replace(/[\s-]/g, '+').replace(/[^a-zA-Z+\s]/g, '')}`
       let stopTotal = university.stops
       let stopWheelchair = university.wheelchairs
-      let stopRatio = university.ratio
+      let stopRatio = university.ratio.toFixed(2)
       // Create markers
       let marker = new google.maps.Marker({
         map: map,
