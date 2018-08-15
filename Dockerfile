@@ -1,8 +1,13 @@
-FROM python
+FROM python:3.7-alpine
 
-COPY . /src/.
+LABEL Name=mbtaccess Version=0.2.0
+EXPOSE 80
+ENV APP_PORT 80
+ENV APP_HOST '0.0.0.0'
 
-EXPOSE 8000
+WORKDIR /app
+ADD . /app
 
-WORKDIR /src/
-CMD python3 -m http.server 8000
+RUN python3 -m pip install -r requirements.txt
+RUN python3 migrate.py
+CMD ["python3", "app.py"]
