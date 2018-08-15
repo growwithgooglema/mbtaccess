@@ -83,8 +83,8 @@ celerybeat-schedule
 .env
 
 # virtualenv
-.venv
-venv/
+.venv*
+venv*/
 ENV/
 
 # Spyder project settings
@@ -109,8 +109,8 @@ ENV/
 # Node Modules
 node_modules/
 
-# Test DB
-test_database.sqlite
+# Database
+*.sqlite
 
 # Some other info
 *.gpg
