@@ -40,9 +40,10 @@ class AppTest(unittest.TestCase):
             'index.html': 404,
             '/': 200,
             '/sw.js': 200,
-            '/data/cleaner_universities.json': 200,
             '/universities.html': 404,
             '/universities': 200,
+            '/data/cleaner_universities.json': 404,
+            '/universities/data': 200,
             '/stops?lat=42.35947&lon=-71.09296': 200,
             '/stop/5': 200,
         }
