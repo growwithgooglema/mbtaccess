@@ -24,7 +24,7 @@ async function initMap () {
       infoWindow.setContent(location.name)
       infoWindow.open(map, marker)
       // Fetch stops near location from database
-      const query = fetch(`http://localhost:5000/stops?lat=${location.lat}&lon=${location.lng}`)
+      const query = fetch(`stops?lat=${location.lat}&lon=${location.lng}`)
       const data = await (await query).json()
       const stops = data.stops
       // Create table that will be populated with stops
