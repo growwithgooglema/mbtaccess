@@ -19,10 +19,10 @@ class UtilitiesTest(unittest.TestCase):
 
     def setUp(self):
         """Set up test variables"""
-        self.bad_url = "https://api-v3.mbta.com/stopping"
-        self.good_url = "https://api-v3.mbta.com/stops"
-        self.good_path = os.path.join(main_dir, "data", "universities.json")
-        self.bad_path = os.path.join(main_dir, "data", "bad_universities.json")
+        self.bad_url = 'https://api-v3.mbta.com/stopping'
+        self.good_url = 'https://api-v3.mbta.com/stops'
+        self.good_path = os.path.join(main_dir, 'data', 'universities.json')
+        self.bad_path = os.path.join(main_dir, 'data', 'bad_universities.json')
         self.point1 = {'lat': 42.36947, 'lon': -71.08296}
         self.point2 = {'lat': 41.76947, 'lon': -72.12296}
 
