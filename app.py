@@ -28,6 +28,12 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/about')
+def about():
+    """App route function for about page."""
+    return render_template('about.html')
+
+
 @app.route('/universities')
 def universities():
     """App route function for universities page."""
@@ -55,7 +61,6 @@ def cleaner_universities():
 @app.route('/stops', methods=['GET'])
 def get_stops():
     """Get stops given latitude and longitude."""
-    # TODO: Something like /stops?lat=&lon= should point to this function.
     keys = ('lat', 'lon')
     missing = []
     user_info = {}
@@ -84,7 +89,7 @@ def get_stops():
         })
     stops = []
     for stop in Stop.query.all():
-        if stop.within_distance(user_info):
+        if stop.within_distance(user_info) and stop.wheelchair_boarding == 1:
             stops.append(stop.serialize())
     status = 'good' if stops else 'bad'
     if not stops:
