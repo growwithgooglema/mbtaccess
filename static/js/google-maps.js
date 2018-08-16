@@ -75,7 +75,7 @@ async function initMap () {
                 <header>
                   <strong>${number}. ${name}</strong>
                 </header>
-                <div><a href="${googleUrl}">View on Google Maps</a></div>
+                <div><a href="${googleUrl}" target="_blank">View on Google Maps</a></div>
               </div>`)
             infoWindow.open(map, marker)
           })
