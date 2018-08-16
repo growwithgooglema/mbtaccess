@@ -77,8 +77,7 @@ class Stop(db.Model):
 
     def within_distance(self, point, distance=(1.609344)/2.0):
         """
-        Returns True if the distance between `self` and `point`
-        is less than or equal to half a mile.
+        Returns True if the distance between `self` and `point` is ≤0.5 miles.
 
         :param point: a python dictionary with keys lat and lon corresponding to a geo position
         :type: dict
@@ -96,9 +95,8 @@ class Stop(db.Model):
     @classmethod
     def from_api(cls, url):
         """
-        Given the URL endpoint to the MBTA stops API,
-        the function should fetch all the stops and generate Stop
-        objects with said stops.
+        Given the URL endpoint to the MBTA stops API, the function should fetch all stops
+        and generate Stop objects from stops.
 
         :param url: The endpoint for the stops API
         :type: str

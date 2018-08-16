@@ -72,7 +72,7 @@ def get_stops(url):
     try:
         response = request.urlopen(rqst)
     except HTTPError:
-        msg = "The provided URL {u} is not a correct MBTA data URL.".format(u=url)
+        msg = 'The provided URL {u} is not a correct MBTA data URL.'.format(u=url)
         raise BadUrlError(msg) from None
     if response.status == 200:
         contents = response.read()
@@ -80,7 +80,7 @@ def get_stops(url):
             contents = contents.decode('utf8')
         data = json.loads(contents)
         return data.get('data')
-    msg = "The HTTP request to {u} failed with reason {r}."
+    msg = 'The HTTP request to {u} failed with reason {r}.'
     raise MBTAResponseError(msg.format(u=url, r=response.reason))
 
 
@@ -122,7 +122,7 @@ def process_schools(schools_data, url):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=RawDescriptionHelpFormatter)
-    parser.add_argument("stops_url", help="URL to MBTA stops JSON data.")
-    parser.add_argument("schools_data", help="Path to the JSON file containing universities data.")
+    parser.add_argument('stops_url', help='URL to MBTA stops JSON data.')
+    parser.add_argument('schools_data', help='Path to the JSON file containing universities data.')
     args = parser.parse_args()
     print(process_schools(args.schools_data, args.stops_url))

@@ -24,7 +24,7 @@ async function initMap () {
       infoWindow.setContent(location.name)
       infoWindow.open(map, marker)
       // Fetch stops near location from database
-      const query = fetch(`http://localhost:5000/stops?lat=${location.lat}&lon=${location.lng}`)
+      const query = fetch(`stops?lat=${location.lat}&lon=${location.lng}`)
       const data = await (await query).json()
       const stops = data.stops
       if (stops.length !== 0) {
@@ -75,7 +75,7 @@ async function initMap () {
                 <header>
                   <strong>${number}. ${name}</strong>
                 </header>
-                <div><a href="${googleUrl}">View on Google Maps</a></div>
+                <div><a href="${googleUrl}" target="_blank">View on Google Maps</a></div>
               </div>`)
             infoWindow.open(map, marker)
           })

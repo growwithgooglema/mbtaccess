@@ -14,8 +14,8 @@ app = Flask(__name__)
 if os.environ.get('DBASE_URL'):
     db_url = os.environ.get('DBASE_URL')
 else:
-    db_url = "sqlite:///{p}".format(
-        p=os.path.join(os.path.dirname(__file__), "test_database.sqlite")
+    db_url = 'sqlite:///{p}'.format(
+        p=os.path.join(os.path.dirname(__file__), 'stops.sqlite')
     )
 app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -40,7 +40,15 @@ def universities():
     return render_template('universities.html')
 
 
-@app.route("/sw.js")
+@app.route('/universities/data')
+def cleaner_universities():
+    """Provide endpoint for data/cleaner_universities.json."""
+    with open(os.path.join(os.path.dirname(__file__), 'data', 'cleaner_universities.json')) as f:
+        data = json.load(f)
+    return jsonify(data)
+
+
+@app.route('/sw.js')
 def sworker():
     """Serve the app's service worker from here."""
     with open(os.path.join(os.path.dirname(__file__), 'sw.js')) as f:
@@ -48,14 +56,6 @@ def sworker():
     resp = make_response(contents)
     resp.mimetype = 'text/javascript'
     return resp
-
-
-@app.route("/data/cleaner_universities.json")
-def cleaner_universities():
-    """get to data/cleaner_universities.json"""
-    with open(os.path.join(os.path.dirname(__file__), 'data', 'cleaner_universities.json')) as f:
-        data = json.load(f)
-    return jsonify(data)
 
 
 @app.route('/stops', methods=['GET'])
@@ -73,13 +73,13 @@ def get_stops():
             print(excp)
             user_info[k] = None
     if any(not v for v in user_info.values()):
-        message = 'lat or lon or both could not parsed properly.'
+        message = 'Coordinates could not be parsed properly.'
         if missing:
             if len(missing) == 1:
-                message += ' {m} is missing from the query string.'.format(m=" and ".join(missing))
+                message += ' {m} is missing from the query string.'.format(m=' and '.join(missing))
             else:
                 message += ' Both {m} are missing from the query string.'.format(
-                    m=" and ".join(missing))
+                    m=' and '.join(missing))
         message += ' Make sure you\'re using the query stops?lat=value&lon=value.'
         message += ' Also, the values should be floating point values.'
         return jsonify(**{
@@ -93,7 +93,7 @@ def get_stops():
             stops.append(stop.serialize())
     status = 'good' if stops else 'bad'
     if not stops:
-        message = 'Could not find stops for the given lat and long'
+        message = 'Could not find stops for the given coordinates.'
     else:
         message = '{cnt} stops found'.format(cnt=len(stops))
     return jsonify(**{
@@ -105,7 +105,7 @@ def get_stops():
 
 @app.route('/stop/<stop_id>', methods=['GET'])
 def get_stop(stop_id):
-    """Get an MBTA stop by its assigned ID. Something like /stop/5 should do."""
+    """Get an MBTA stop by its assigned ID, such as /stop/5."""
     match = [stop.serialize() for stop in Stop.query.filter_by(stop_id=stop_id).all()]
     status = 'good' if match else 'bad'
     if match:
@@ -120,4 +120,7 @@ def get_stop(stop_id):
 
 
 if __name__ == '__main__':
-    app.run(port=os.environ.get('APP_PORT') or 5000, debug=True)
+    app.run(
+        host=os.environ.get('APP_HOST') or '0.0.0.0',
+        port=os.environ.get('APP_PORT') or 5000
+    )
