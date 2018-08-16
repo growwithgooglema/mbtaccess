@@ -13,7 +13,7 @@ async function initMap () {
     google.maps.event.addDomListener(window, 'resize', () => map.fitBounds(bounds))
     const infoWindow = new google.maps.InfoWindow()
     // Fetch university data
-    const query = fetch('data/cleaner_universities.json')
+    const query = fetch('universities/data')
     const universities = await (await query).json()
     // Create table that will be populated with universities
     const tableDiv = document.getElementById('universities-table')
