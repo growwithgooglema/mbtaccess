@@ -103,25 +103,37 @@ The Flask application should run within a virtual environment. Python 3 is bundl
 
 ### Docker
 
-The application is assembled into a Docker container, and is available as a container image on Docker Hub. Docker Hub rebuilds the container after each commit to the `master` branch.
+The application is assembled into a [Docker](https://www.docker.com/) container.
 
-1. **Pull Docker container image**:
+- An **image** is the executable set of files used by Docker.
+- A **container** is a running image.
+- The [Dockerfile](https://docs.docker.com/get-started/part2/#define-a-container-with-dockerfile) tells Docker how to build the container.
+- Visual Studio Code has built-in Docker features. See [Working with Docker in VS Code](https://code.visualstudio.com/docs/azure/docker).
+
+To build and run the Docker application container locally:
+
+1. Clone, or fork and clone, the GitHub repository to your machine.
+2. [Install Docker Desktop](https://www.docker.com/products/docker-desktop) on your machine.
+3. Build and run the container.
 
     ```sh
-    docker pull growwithgooglema/gwg-mbta:latest
+    docker build -t mbtaccess .
+    docker run -d -p 80:80 mbtaccess:latest
     ```
 
-2. **Run Docker container locally**:
+    `-p 80:80` maps the http port 80 from your local machine to port 80 on the container. Ports other than `80` can be used by modifying the Dockerfile.
+
+    Other useful commands:
 
     ```sh
-    docker run -d -p 80:8000 growwithgooglema/gwg-mbta:latest
+    docker container ls
+    docker container stop <SHA or container name>
+    docker container rm <SHA or container name>
+    docker image ls
+    docker image rm <SHA or container name>
     ```
 
-    - `-p 80:8000` maps the http port 80 from your local machine to port 8000 on the container.
-    - Local ports other than 80 can be used.
-    - Container ports other than 8000 can be used if the Dockerfile is modified for the new http server listener port.
-
-3. **Run application**: To check if the application is running correctly, open a web browser and navigate to [http://localhost:80](http://localhost:80).
+4. Browse to [http://localhost:80](http://localhost:80) to see the app.
 
 ### Testing
 
