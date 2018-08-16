@@ -17,7 +17,7 @@ from app import app, db
 if os.environ.get('DBASE_URL'):
     db_url = os.environ.get('DBASE_URL')
 else:
-    db_url = "sqlite:///{p}".format(p=os.path.join(main_dir, "test_database.sqlite"))
+    db_url = 'sqlite:///{p}'.format(p=os.path.join(main_dir, 'stops.sqlite'))
 
 
 class AppTest(unittest.TestCase):
@@ -40,14 +40,15 @@ class AppTest(unittest.TestCase):
             'index.html': 404,
             '/': 200,
             '/sw.js': 200,
-            '/data/cleaner_universities.json': 200,
             '/universities.html': 404,
             '/universities': 200,
+            '/data/cleaner_universities.json': 404,
+            '/universities/data': 200,
             '/stops?lat=42.35947&lon=-71.09296': 200,
             '/stop/5': 200,
         }
         for e, exp in endpoints.items():
-            with self.subTest("Testing endpoint {e}".format(e=e), end=e, expect=exp):
+            with self.subTest('Testing endpoint {e}'.format(e=e), end=e, expect=exp):
                 self.assertEqual(self.client.get(e).status_code, exp)
 
     def test_stop(self):
@@ -59,7 +60,7 @@ class AppTest(unittest.TestCase):
             '/stop/225': 'good',
         }
         for e, exp in endpoints.items():
-            with self.subTest("Testing API endpoint {e}".format(e=e), end=e, expect=exp):
+            with self.subTest('Testing API endpoint {e}'.format(e=e), end=e, expect=exp):
                 data = json.loads(self.client.get(e).data.decode('utf8'))
                 self.assertEqual(data.get('status'), exp)
 
@@ -73,7 +74,7 @@ class AppTest(unittest.TestCase):
             '/stops?lat=42.36947&lon=-71.08296': 'good'
         }
         for e, exp in endpoints.items():
-            with self.subTest("Testing API endpoint {e}".format(e=e), end=e, expect=exp):
+            with self.subTest('Testing API endpoint {e}'.format(e=e), end=e, expect=exp):
                 data = json.loads(self.client.get(e).data.decode('utf8'))
                 # Test for equality
                 self.assertEqual(data.get('status'), exp)
