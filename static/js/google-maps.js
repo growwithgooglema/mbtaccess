@@ -91,9 +91,9 @@ async function initMap () {
         stopRow.appendChild(stopRowNum)
         let stopRowName = document.createElement('td')
         if (stop.platform_name) {
-          stopRowName.innerHTML = `<a href="${googleUrl}">${name}</a><p>${stop.platform_name}</p>`
+            stopRowName.innerHTML = `<a href="${googleUrl}" target="_blank">${name}</a><p>${stop.platform_name}</p>`
         } else {
-          stopRowName.innerHTML = `<a href="${googleUrl}">${name}</a>`
+            stopRowName.innerHTML = `<a href="${googleUrl}" target="_blank">${name}</a>`
         }
         stopRow.appendChild(stopRowName)
       })

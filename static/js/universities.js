@@ -76,7 +76,7 @@ async function initMap () {
             <header>
               <strong>${number}. ${name}</strong>
             </header>
-            <div><a href="${googleUrl}">View on Google Maps</a></div>
+            <div><a href="${googleUrl}" target="_blank">View on Google Maps</a></div>
           </div>`)
         infoWindow.open(map, marker)
       })
@@ -92,7 +92,7 @@ async function initMap () {
       universityRowNum.textContent = number
       universityRow.appendChild(universityRowNum)
       let universityRowName = document.createElement('td')
-      universityRowName.innerHTML = `<a href="${googleUrl}">${name}</a>`
+      universityRowName.innerHTML = `<a href="${googleUrl}" target="_blank">${name}</a>`
       universityRow.appendChild(universityRowName)
       let universityRowStopTotal = document.createElement('td')
       universityRowStopTotal.textContent = stopTotal
