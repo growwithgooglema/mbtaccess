@@ -1,20 +1,7 @@
-header {
-  font-family: Roboto;
-}
-html, body, main {
-  height: 90%;
+html, body {
+  height: 100%;
 }
 #map {
-  height: 90%;
-  margin: auto;
-}
-#universities, #stops {
-  height: 80%;
-  font-size: 0.8rem;
-}
-.center {
-  margin: auto;
-  width: 80%;
-  padding: 0px;
-  border: 0px;
+  height: 100%;
+  box-sizing: content-box;
 }
