@@ -13,9 +13,10 @@
 - [Application stack](#application-stack)
   - [Front-end](#front-end)
   - [Flask](#flask)
-  - [Docker](#docker)
   - [Testing](#testing)
   - [Continuous Integration](#continuous-integration)
+  - [Docker](#docker)
+- [Repository contents](#repository-contents)
 - [Maintainers](#maintainers)
 
 ## Description
@@ -101,6 +102,35 @@ The Flask application should run within a virtual environment. Python 3 is bundl
 *TODO*
 -->
 
+### Testing
+
+- We use Python's `unittest` module for unit testing.
+- [Python unit testing in VS Code](https://code.visualstudio.com/docs/python/unit-testing):
+  - Use `unittest` settings in *.vscode/settings.json*
+  - *Command Palette -> Run All Unit Tests*. The result will show up in the status bar.
+  - *Command Palette -> View Test Results*.
+  - View results in the output panel (Cmd+shift+u).
+  - Individual tests can also be run. A popup will show above each test unit in the test module file.
+- Unit testing Python from the command line:
+
+  ```sh
+  # activate virtual env
+  . venv/bin/activate
+  # Discover and run tests
+  (venv) <path> $ python -W ignore -m unittest discover -vv -s tests -p "*test.py"
+  ```
+
+  - This calls python with the following twists:
+
+    1. `-W ignore`: Tells the python interpreter to ignore `warnings` since those are written to the standard error and can act like errors, when they're usually just deprecation warnings.
+    2. `-m unittest`: Tells the python interpreter to import the `unittest` module
+    3. `discover -vv -s tests -p "*test.py"`: Tells the `unittest` module to discover and run test cases (with a verbosity level of 2) located within the `tests` directory inside python files with the pattern `"*test.py"`
+
+### Continuous Integration
+
+- Tests are run automatically on the GitHub repo by Continuous Integration (CI).
+- We use [Travis CI](https://travis-ci.org). Build information is available on the [MBTAccess Travis CI page](https://travis-ci.org/growwithgooglema/mbtaccess).
+
 ### Docker
 
 The application is assembled into a [Docker](https://www.docker.com/) container.
@@ -169,36 +199,36 @@ TODO update the file list after rebuilding the app with Flask
 
 ## Repository contents
 
-- [data/](data): Code for gathering application data.
+- [data/](data): JSON data for the list of universities.
+- [scripts/](scripts)
+  - [get_university_list.py](scripts/get_university_list.py): Python script to fetch the list of universities.
 - [static/](static): CSS, image, and JavaScript files for the application.
   - [css/](static/css)
     - [custom.css](static/css/custom.css): Custom CSS for the app, in addition to Bootstrap.
   - [img/](static/img)
   - [js/](static/js)
-    - [addratios.js](static/js/addratios.js)
-    - [dbCaching.js](static/js/dbCaching.js)
-    - [google-maps.js](static/js/google-maps.js)
-    - [index.js](static/js/index.js)
-    - [localforage.min.js](static/js/localforage.min.js)
-    - [map.js](static/js/map.js)
-    - [school.js](static/js/school.js)
-    - [utilities.js](static/js/utilities.js): Calculates distances in order to display stop information based on the location searched.
-    - [utilities.test.js](static/js/utilities.test.js)
+    - [about](static/js/about.js)
+    - [date](static/js/date.js): Footer date calculation
+    - [google-maps](static/js/google-maps.js): JavaScript for map page. Sends a location query to the database, and displays results on the page.
+    - [sw-install](static/js/sw-install.js): Installation script for the Service Worker script [sw.js](sw.js).
+    - [universities](static/js/universities.js): JavaScript for universities page. Shows universities on map, with results in table below.
+- [templates/](templates): Webpage HTML. Templates are assembled by Flask.
+- [tests/](tests): Application tests.
+- [.dockerignore](.dockerignore): Instructions to Docker to exclude certain files from commits.
 - [.gitignore](.gitignore): Instructions to Git to exclude certain files from commits.
-- [.jshintrc](.jshintrc)
+- [app.py](app.py): Python Flask application module. This is the main file that runs the app, templates the pages, and coordinates the app's functions.
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Guidelines for conduct.
 - [CONTRIBUTING.md](CONTRIBUTING.md): Instructions for contributing to the repository.
+- [docker-compose-debug.yml](docker-compose-debug.yml)
+- [docker-compose.yml](docker-compose.yml): Docker Compose is a tool that coordinates multiple Docker containers.
 - [Dockerfile](Dockerfile): Instructions for Docker container builds.
-- [get_university_list.py](get_university_list.py):
-- [index.html](index.html): The application homepage.
 - [LICENSE](LICENSE): This file describes how the repository can be used by others. We have provided the repository under the MIT license, a permissive and widely-used license. See the [choose a license page](https://choosealicense.com/) for more info on licenses.
-- [package-lock.json](package-lock.json):
-- [package.json](package.json):
+- [migrate.py](migrate.py): Python script that fetches data from the MBTA API and stores it in the stops database.
+- [models.py](models.py): Python script that sets up the MBTA stops database model.
 - [README.md](README.md): This file, a concise description of the repository.
+- stops.sqlite: Database of MBTA stops.
 - [sw.js](sw.js): This is the Service Worker file. Service Worker is a JavaScript file that sits between the browser and network requests. It helps to coordinate retrieval of information from the network and cache.
-- [universities.html](universities.html): This is the webpage that shows the table with university accessibility data.
 - [utilities.py](utilities.py): Python module with helper functions for the application. The functions calculate distances in order to display stop information based on the location searched.
- -->
 
 ## Maintainers
 
