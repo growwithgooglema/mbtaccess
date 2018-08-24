@@ -1,5 +1,5 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MBTAccess Service Worker ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-
+/* eslint-env serviceworker */
 // Set up cache ID variable
 const cacheID = 'mbtaccess-v1'
 const key = 'AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY'
@@ -16,8 +16,6 @@ self.addEventListener('install', event => {
     'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js',
     'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css',
     'static/css/custom.css',
-    'static/img/baseline_accessible_black_36dp.png',
-    'static/img/favicon.png',
     'static/img/favicon.ico',
     'static/img/mbtaccess-about-google-maps.png',
     'static/img/mbtaccess-meetup-20180407-mit.jpg',

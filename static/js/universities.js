@@ -4,10 +4,10 @@ async function initMap () {
     let navLink = document.getElementById('nav-link-universities')
     navLink.className = 'nav-link active'
     // Initialize Google Map
-    const boston = {lat: 42.360091, lng: -71.09416}
+    const mapCenter = {lat: 42.360091, lng: -71.09416}
     const map = new google.maps.Map(document.getElementById('map'), {
-      center: boston,
-      zoom: 13
+      center: mapCenter,
+      zoom: 10
     })
     const bounds = new google.maps.LatLngBounds()
     google.maps.event.addDomListener(window, 'resize', () => map.fitBounds(bounds))
@@ -42,7 +42,13 @@ async function initMap () {
     thStopTotal.scope = 'col'
     theadRow.appendChild(thStopTotal)
     const thStopWheelchair = document.createElement('th')
-    thStopWheelchair.innerHTML = '<img src="static/img/baseline_accessible_black_36dp.png" alt="Accessible stops">'
+    thStopWheelchair.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path fill="none" d="M0 0h24v24H0z"/>
+        <circle cx="12" cy="4" r="2"/>
+        <path d="M19 13v-2c-1.54.02-3.09-.75-4.07-1.83l-1.29-1.43c-.17-.19-.38-.34-.61-.45-.01 0-.01-.01-.02-.01H13c-.35-.2-.75-.3-1.19-.26C10.76 7.11 10 8.04 10 9.09V15c0 1.1.9 2 2 2h5v5h2v-5.5c0-1.1-.9-2-2-2h-3v-3.45c1.29 1.07 3.25 1.94 5 1.95zm-6.17 5c-.41 1.16-1.52 2-2.83 2-1.66 0-3-1.34-3-3 0-1.31.84-2.41 2-2.83V12.1c-2.28.46-4 2.48-4 4.9 0 2.76 2.24 5 5 5 2.42 0 4.44-1.72 4.9-4h-2.07z"/>
+      </svg>
+    `
     thStopWheelchair.scope = 'col'
     theadRow.appendChild(thStopWheelchair)
     const thStopRatio = document.createElement('th')
@@ -70,7 +76,6 @@ async function initMap () {
       })
       // Set infoWindow content
       marker.addListener('click', () => {
-        setTimeout(() => marker.setAnimation(null), 1000)
         infoWindow.setContent(
           `<div id="info-window-content">
             <header>
@@ -81,9 +86,6 @@ async function initMap () {
         infoWindow.open(map, marker)
       })
       markersArray.push(marker)
-      // Adjust map to fit markers
-      bounds.extend(marker.position)
-      map.fitBounds(bounds)
       // Fill table with university data
       let universityRow = document.createElement('tr')
       tbody.appendChild(universityRow)
