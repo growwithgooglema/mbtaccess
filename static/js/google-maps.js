@@ -102,9 +102,14 @@ async function initMap () {
       } else {
         let message = 'No stops returned.'
         let stopsFail = document.createElement('div')
-        stopsFail.className = 'alert alert-danger'
+        stopsFail.className = 'alert alert-dismissable alert-danger fade show'
         stopsFail.role = 'alert'
-        stopsFail.textContent = message
+        stopsFail.innerHTML = `
+          ${message}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        `
         const parentDiv = document.querySelector('#map').parentNode
         const mapDiv = document.querySelector('#map')
         parentDiv.insertBefore(stopsFail, mapDiv)
@@ -123,9 +128,14 @@ async function initMap () {
     }
     const failure = e => {
       let geoFail = document.createElement('div')
-      geoFail.className = 'alert alert-warning'
+      geoFail.className = 'alert alert-dismissable alert-warning fade show'
       geoFail.role = 'alert'
-      geoFail.innerHTML = `${e.message}`
+      geoFail.innerHTML = `
+        ${e.message}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      `
       const parentDiv = document.querySelector('#map').parentNode
       const mapDiv = document.querySelector('#map')
       parentDiv.insertBefore(geoFail, mapDiv)
