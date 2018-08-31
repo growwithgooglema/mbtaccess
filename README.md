@@ -11,10 +11,10 @@
 - [Description](#description)
 - [Contributing](#contributing)
 - [Application stack](#application-stack)
-  - [Front-end](#front-end)
   - [Flask](#flask)
   - [Testing](#testing)
-  - [Continuous Integration](#continuous-integration)
+  - [Front-end](#front-end)
+  - [Search](#search)
   - [Docker](#docker)
 - [Repository contents](#repository-contents)
 - [Maintainers](#maintainers)
@@ -34,12 +34,6 @@ MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provid
 - This is a collaborative open-source project by members of @growwithgooglema/mbtaccess. We have a [team discussion board](https://github.com/orgs/growwithgooglema/teams/mbtaccess) where we post announcements and meeting notes.
 
 ## Application stack
-
-### Front-end
-
-- The application pages are styled with [Bootstrap 4](https://getbootstrap.com), a library of HTML, CSS, and JavaScript components.
-- Markdown documents in the repository have been formatted in a standard style, based on suggestions from [vscode-markdownlint](https://github.com/DavidAnson/vscode-markdownlint).
-- The icon is from [Google Material Design](https://material.io/tools/icons) and is available under [Apache license version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
 
 ### Flask
 
@@ -96,12 +90,6 @@ The Flask application should run within a virtual environment. Python 3 is bundl
     - The goal is to deploy the API endpoints to Google Cloud.
 6. **Test the app pages locally**: Navigate to [the map page](http://127.0.0.1:5000) and [the universities page](http://127.0.0.1:5000/universities)
 
-<!--
-### Elasticsearch
-
-*TODO*
--->
-
 ### Testing
 
 - We use Python's `unittest` module for unit testing.
@@ -121,15 +109,36 @@ The Flask application should run within a virtual environment. Python 3 is bundl
   ```
 
   - This calls python with the following twists:
-
     1. `-W ignore`: Tells the python interpreter to ignore `warnings` since those are written to the standard error and can act like errors, when they're usually just deprecation warnings.
     2. `-m unittest`: Tells the python interpreter to import the `unittest` module
     3. `discover -vv -s tests -p "*test.py"`: Tells the `unittest` module to discover and run test cases (with a verbosity level of 2) located within the `tests` directory inside python files with the pattern `"*test.py"`
-
-### Continuous Integration
-
 - Tests are run automatically on the GitHub repo by Continuous Integration (CI).
 - We use [Travis CI](https://travis-ci.org). Build information is available on the [MBTAccess Travis CI page](https://travis-ci.org/growwithgooglema/mbtaccess).
+
+### Front-end
+
+- The application pages are styled with [Bootstrap 4](https://getbootstrap.com), a library of HTML, CSS, and JavaScript components.
+- Markdown documents in the repository have been formatted in a standard style, based on suggestions from [vscode-markdownlint](https://github.com/DavidAnson/vscode-markdownlint).
+- The icon is from [Google Material Design](https://material.io/tools/icons) and is available under [Apache license version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+
+### Search
+
+#### Geolocation
+
+- Users can provide their location, and the app will locate stops around them. Geolocation comes from the [W3C geolocation standard](https://w3c.github.io/geolocation-api/), not from Google Maps.
+- Successful geolocation calls the `showStops(location)` to return results.
+- Users who deny the geolocation prompt will see a dismissable alert.
+
+#### Google Places
+
+- Users can search the Google Places database using the input field above the map. Google Places [Autocomplete](https://google-developers.appspot.com/maps/documentation/javascript/places-autocomplete) will return results as users type.
+- Selection of an autocomplete item clears previous map markers, and calls the `showStops(location)` to return results.
+
+<!--
+#### Elasticsearch
+
+*TODO*
+-->
 
 ### Docker
 
