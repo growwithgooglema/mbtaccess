@@ -19,6 +19,13 @@ async function initMap () {
     const autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), options)
     const geocoder = new google.maps.Geocoder()
     const markersArray = []
+    const clearStops = () => {
+      markersArray.forEach(marker => marker.setMap(null))
+      const tableDiv = document.getElementById('stops-table')
+      while (tableDiv.firstChild) {
+        tableDiv.removeChild(tableDiv.firstChild)
+      }
+    }
     const showStops = async location => {
       // Create map marker and infoWindow at location
       let marker = new google.maps.Marker({
@@ -130,7 +137,7 @@ async function initMap () {
         name: 'You'
       }
       console.log('Successfully geolocated user.')
-      markersArray.forEach(marker => marker.setMap(null))
+      clearStops()
       showStops(location)
     }
     const failure = e => {
@@ -172,7 +179,7 @@ async function initMap () {
             lng: results[0].geometry.location.lng(),
             name: selectedPlace.name.replace(/,.*/g, '')
           }
-          markersArray.forEach(marker => marker.setMap(null))
+          clearStops()
           console.log(`Searching for stops near ${selectedPlace.name}`)
           showStops(location)
         } else {
