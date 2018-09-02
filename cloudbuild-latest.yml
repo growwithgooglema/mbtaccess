@@ -1,0 +1,23 @@
+# Build configuration for Google Cloud Build, Latest trigger
+steps:
+  # Build container with Cloud Build Docker builder
+- name: "gcr.io/cloud-builders/docker"
+  args: ["build", "-t", "gcr.io/mbtaccess/web:latest", "."]
+  # Push to Google Container Registry
+- name: "gcr.io/cloud-builders/docker"
+  args: ["push", "gcr.io/mbtaccess/web:latest"]
+  # Set Kubernetes deployment image
+- name: "gcr.io/cloud-builders/kubectl"
+  args:
+  - "set"
+  - "image"
+  - "deployment/web-latest"
+  - "gcr.io/mbtaccess/web:latest"
+  # Patch Kubernetes deployment with config annotation
+- name: "gcr.io/cloud-builders/kubectl"
+  args:
+  - "patch"
+  - "deployment"
+  - "web-latest"
+  - "-p"
+  - "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
