@@ -12,7 +12,7 @@ steps:
   - "set"
   - "image"
   - "deployment/web-latest"
-  - "gcr.io/mbtaccess/web:latest"
+  - "web=gcr.io/mbtaccess/web:latest"
   env:
   - "CLOUDSDK_COMPUTE_ZONE=us-central1"
   - "CLOUDSDK_CONTAINER_CLUSTER=cluster-master"
