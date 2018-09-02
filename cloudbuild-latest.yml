@@ -11,7 +11,7 @@ steps:
   args:
   - "set"
   - "image"
-  - "deployment/web-latest"
+  - "deployment/mbtaccess-latest"
   - "web=gcr.io/mbtaccess/web:latest"
   env:
   - "CLOUDSDK_COMPUTE_ZONE=us-central1"
@@ -21,6 +21,6 @@ steps:
   args:
   - "patch"
   - "deployment"
-  - "web-latest"
+  - "mbtaccess-latest"
   - "-p"
   - "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"`date +'%s'`\"}}}}}"
