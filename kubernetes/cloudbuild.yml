@@ -23,4 +23,4 @@ steps:
   - "deployment"
   - "mbtaccess"
   - "-p"
-  - "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\": `date +'%s'`}}}}}"
+  - "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":`date +'%s'`}}}}}"
