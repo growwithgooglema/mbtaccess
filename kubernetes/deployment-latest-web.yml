@@ -1,30 +1,27 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mbtaccess-deployment
   annotations:
   labels:
-    app: mbtaccess
+    app: mbtaccess-latest
+    track: canary
+  name: web
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: mbtaccess
+      app: mbtaccess-latest
   strategy:
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
     type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: mbtaccess
+        app: mbtaccess-latest
     spec:
       containers:
-      - image: gcr.io/mbtaccess/github-growwithgooglema-mbtaccess:master
+      - image: gcr.io/mbtaccess/web:latest
         imagePullPolicy: Always
-        name: github-growwithgooglema-mbtaccess
+        name: web
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
