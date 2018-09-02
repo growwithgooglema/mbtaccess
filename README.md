@@ -14,8 +14,9 @@
   - [Flask](#flask)
   - [Testing](#testing)
   - [Front-end](#front-end)
-  - [Search](#search)
   - [Docker](#docker)
+  - [Deployment](#deployment)
+  - [Networking](#networking)
 - [Repository contents](#repository-contents)
 - [Maintainers](#maintainers)
 
@@ -26,6 +27,8 @@ This app integrates the Google Maps and MBTA (Massachusetts Bay Transportation A
 MBTA recently released their [MBTA V3 API](https://api-v3.mbta.com/) that provides public transportation data in JSON API format. One of the under-utilized datasets in their API is the wheelchair accessibility of the stops. Google Maps [recently started](http://fortune.com/2018/03/15/google-maps-wheelchair-accessible-routes/) providing wheelchair accessibility info, but the implementation is not particularly extensive.
 
 **We aim to create a web app that quickly and conveniently identifies wheelchair accessible stops near the user.**
+
+There are two builds available, a stable build at [mbtaccess.org](https://mbtaccess.org) and a canary build at [latest.mbtaccess.org](https://latest.mbtaccess.org).
 
 ## Contributing
 
@@ -109,58 +112,65 @@ The Flask application should run within a virtual environment. Python 3 is bundl
   ```
 
   - This calls python with the following twists:
-    1. `-W ignore`: Tells the python interpreter to ignore `warnings` since those are written to the standard error and can act like errors, when they're usually just deprecation warnings.
-    2. `-m unittest`: Tells the python interpreter to import the `unittest` module
-    3. `discover -vv -s tests -p "*test.py"`: Tells the `unittest` module to discover and run test cases (with a verbosity level of 2) located within the `tests` directory inside python files with the pattern `"*test.py"`
+      1. `-W ignore`: Tells the python interpreter to ignore `warnings` since those are written to the standard error and can act like errors, when they're usually just deprecation warnings.
+      2. `-m unittest`: Tells the python interpreter to import the `unittest` module
+      3. `discover -vv -s tests -p "*test.py"`: Tells the `unittest` module to discover and run test cases (with a verbosity level of 2) located within the `tests` directory inside python files with the pattern `"*test.py"`
 - Tests are run automatically on the GitHub repo by Continuous Integration (CI).
 - We use [Travis CI](https://travis-ci.org). Build information is available on the [MBTAccess Travis CI page](https://travis-ci.org/growwithgooglema/mbtaccess).
 
 ### Front-end
 
+#### Styling
+
 - The application pages are styled with [Bootstrap 4](https://getbootstrap.com), a library of HTML, CSS, and JavaScript components.
 - Markdown documents in the repository have been formatted in a standard style, based on suggestions from [vscode-markdownlint](https://github.com/DavidAnson/vscode-markdownlint).
 - The icon is from [Google Material Design](https://material.io/tools/icons) and is available under [Apache license version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
 
-### Search
+#### Search
 
-#### Geolocation
+##### Geolocation
 
 - Users can provide their location, and the app will locate stops around them. Geolocation comes from the [W3C geolocation standard](https://w3c.github.io/geolocation-api/), not from Google Maps.
 - Successful geolocation calls the `showStops(location)` to return results.
 - Users who deny the geolocation prompt will see a dismissable alert.
 
-#### Google Places
+##### Google Places
 
 - Users can search the Google Places database using the input field above the map. Google Places [Autocomplete](https://google-developers.appspot.com/maps/documentation/javascript/places-autocomplete) will return results as users type.
-- Selection of an autocomplete item clears previous map markers, and calls the `showStops(location)` to return results.
+- Selection of an autocomplete item clears previous map markers, and calls the `showStops(location)` function to return results.
 
 <!--
-#### Elasticsearch
+##### Elasticsearch
 
 *TODO*
 -->
 
 ### Docker
 
+#### App container
+
 The application is assembled into a [Docker](https://www.docker.com/) container.
 
 - An **image** is the executable set of files used by Docker.
 - A **container** is a running image.
-- The [Dockerfile](https://docs.docker.com/get-started/part2/#define-a-container-with-dockerfile) tells Docker how to build the container.
+- The [Dockerfile](https://docs.docker.com/engine/reference/builder/) tells Docker how to build the container.
 - Visual Studio Code has built-in Docker features. See [Working with Docker in VS Code](https://code.visualstudio.com/docs/azure/docker).
 
 To build and run the Docker application container locally:
 
 1. Clone, or fork and clone, the GitHub repository to your machine.
 2. [Install Docker Desktop](https://www.docker.com/products/docker-desktop) on your machine.
-3. Build and run the container.
+3. Build the image and run the container.
 
     ```sh
-    docker build -t mbtaccess .
+    cd mbtaccess
+    docker build -t web .
     docker run -d -p 80:80 mbtaccess:latest
     ```
 
-    `-p 80:80` maps the http port 80 from your local machine to port 80 on the container. Ports other than `80` can be used by modifying the Dockerfile.
+    `-t web` tells Docker to name the image `web`. A tag can be specified with `mbtaccess:tag`, otherwise, the tag `latest` will be used. Adding `.` builds from the current directory.
+
+    `-d` runs the container in detached mode. Docker will display the container SHA and return the terminal prompt. `-p 80:80` maps the http port 80 from your local machine to port 80 on the container.
 
     Other useful commands:
 
@@ -172,43 +182,47 @@ To build and run the Docker application container locally:
     docker image rm <SHA or container name>
     ```
 
-4. Browse to [http://localhost:80](http://localhost:80) to see the app.
+4. Browse to [http://localhost:80](http://localhost:80) to see the app running in the Docker container.
 
-### Testing
+#### Docker Compose
 
-- We use Python's `unittest` module for unit testing.
-- [Python unit testing in VS Code](https://code.visualstudio.com/docs/python/unit-testing):
-  - Use `unittest` settings in *.vscode/settings.json*
-  - *Command Palette -> Run All Unit Tests*. The result will show up in the status bar.
-  - *Command Palette -> View Test Results*.
-  - View results in the output panel (Cmd+shift+u).
-  - Individual tests can also be run. A popup will show above each test unit in the test module file.
-- Unit testing Python from the command line:
+Docker Compose can create multi-container applications. We don't currently use Docker Compose in production, but the *docker-compose.yml* file is included for local testing.
 
-  ```sh
-  # activate virtual env
-  . venv/bin/activate
-  # Discover and run tests
-  (venv) <path> $ python -W ignore -m unittest discover -vv -s tests -p "*test.py"
-  ```
+To build and run with Docker Compose:
 
-  - This calls python with the following twists:
+```sh
+cd mbtaccess
+docker-compose build
+docker-compose up -d
+```
 
-    1. `-W ignore`: Tells the python interpreter to ignore `warnings` since those are written to the standard error and can act like errors, when they're usually just deprecation warnings.
-    2. `-m unittest`: Tells the python interpreter to import the `unittest` module
-    3. `discover -vv -s tests -p "*test.py"`: Tells the `unittest` module to discover and run test cases (with a verbosity level of 2) located within the `tests` directory inside python files with the pattern `"*test.py"`
+### Deployment
 
-### Continuous Integration
+- The app is deployed with Google Cloud Platform (GCP) Kubernetes Engine.
+- [Cloud Build](https://cloud.google.com/cloud-build/) reads the *cloudbuild.yml* files and builds a Docker container from the GitHub repository each time a commit is pushed.
+- Containers built with Cloud Build are stored in the GCP [Container Registry](https://cloud.google.com/container-registry/) (similar to Docker Cloud/Docker Store).
+- Google Cloud Platform has three [options for Python apps](https://cloud.google.com/python/). We use [Kubernetes Engine](https://cloud.google.com/kubernetes-engine/). [Kubernetes](https://kubernetes.io) (Greek for 'helmsman') is an open-source container management system.
+  - The Docker container for our app is considered a [pod](https://cloud.google.com/kubernetes-engine/docs/concepts/pod).
+  - The pod is deployed as a workload on Kubernetes Engine. [Horizontal pod autoscaling](https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps) adjusts the number of pod replicas based on traffic.
+  - The deployment is configured for [rolling updates](https://cloud.google.com/kubernetes-engine/docs/how-to/updating-apps) and `imagePullPolicy: Always`.
+  - Cloud Build triggers automatic updates to the Kubernetes deployment with an annotation patch in the *cloudbuild.yml* files. We use the `$REVISION_ID` [default variable substitution](https://cloud.google.com/cloud-build/docs/configuring-builds/substitute-variable-values), but a [timestamp annotation](https://github.com/kubernetes/kubernetes/issues/27081#issuecomment-327321981) can also be used.
 
-- Tests are run automatically on the GitHub repo by Continuous Integration (CI).
-- We use [Travis CI](https://travis-ci.org). Build information is available on the [MBTAccess Travis CI page](https://travis-ci.org/growwithgooglema/mbtaccess).
+### Networking
 
-<!--
-TODO update the file list after rebuilding the app with Flask
+- The domain name mbtaccess.org was purchased through [Hover](https://www.hover.com/).
+- The domain name directs web traffic to [Cloudflare](https://www.cloudflare.com/) nameservers for security.
+- Cloudflare sends traffic to GCP with DNS A records that point to a [static IP address](https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip).
+- The static IP address passes network requests to the Kubernetes cluster with a [Kubernetes ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) and load balancer service.
+- The Google Maps JavaScript API requires the API key to be embedded in the source code. The API key only accepts network requests from the Geocoding, Maps and Places APIs and the following HTTP referrers:
+  - `http://localhost/*`
+  - `https://growwithgooglema.github.io/mbtaccess/*`
+  - `https://mbtaccess.org/*`
+  - `https://*.mbtaccess.org/*`
 
 ## Repository contents
 
 - [data/](data): JSON data for the list of universities.
+- [kubernetes/](kubernetes/): Kubernetes deployment configuration files.
 - [scripts/](scripts)
   - [get_university_list.py](scripts/get_university_list.py): Python script to fetch the list of universities.
 - [static/](static): CSS, image, and JavaScript files for the application.
@@ -225,11 +239,12 @@ TODO update the file list after rebuilding the app with Flask
 - [tests/](tests): Application tests.
 - [.dockerignore](.dockerignore): Instructions to Docker to exclude certain files from commits.
 - [.gitignore](.gitignore): Instructions to Git to exclude certain files from commits.
+- [.mailmap](.mailmap): Email configuration.
+- [.travis.yml](.travis.yml): Travis CI build configuration.
 - [app.py](app.py): Python Flask application module. This is the main file that runs the app, templates the pages, and coordinates the app's functions.
 - [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): Guidelines for conduct.
 - [CONTRIBUTING.md](CONTRIBUTING.md): Instructions for contributing to the repository.
-- [docker-compose-debug.yml](docker-compose-debug.yml)
-- [docker-compose.yml](docker-compose.yml): Docker Compose is a tool that coordinates multiple Docker containers.
+- [docker-compose-debug.yml](docker-compose-debug.yml) and [docker-compose.yml](docker-compose.yml): Instructions for coordinated builds of multi-container applications.
 - [Dockerfile](Dockerfile): Instructions for Docker container builds.
 - [LICENSE](LICENSE): This file describes how the repository can be used by others. We have provided the repository under the MIT license, a permissive and widely-used license. See the [choose a license page](https://choosealicense.com/) for more info on licenses.
 - [migrate.py](migrate.py): Python script that fetches data from the MBTA API and stores it in the stops database.
