@@ -3,6 +3,7 @@
   "editor.insertSpaces": true,
   // JavaScript
   "eslint.enable": false,
+  "jshint.enable" : false,
   "standard.enable": true,
   "standard.autoFixOnSave": true,
   // Python

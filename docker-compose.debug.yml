@@ -1,8 +1,8 @@
 version: '2.1'
 
 services:
-  mbtaccess:
-    image: mbtaccess
+  web:
+    image: web
     build:
       context: .
       dockerfile: Dockerfile

@@ -1,0 +1,26 @@
+# Build configuration for Google Cloud Build, Master trigger
+steps:
+  # Build container with Cloud Build Docker builder
+- name: "gcr.io/cloud-builders/docker"
+  args: ["build", "-t", "gcr.io/mbtaccess/web:master", "."]
+  # Push to Google Container Registry
+- name: "gcr.io/cloud-builders/docker"
+  args: ["push", "gcr.io/mbtaccess/web:master"]
+  # Set Kubernetes deployment image
+- name: "gcr.io/cloud-builders/kubectl"
+  args:
+  - "set"
+  - "image"
+  - "deployment/mbtaccess"
+  - "web=gcr.io/mbtaccess/web:master"
+  env:
+  - "CLOUDSDK_COMPUTE_ZONE=us-central1"
+  - "CLOUDSDK_CONTAINER_CLUSTER=cluster-master"
+  # Patch Kubernetes deployment with config annotation
+- name: "gcr.io/cloud-builders/kubectl"
+  args:
+  - "patch"
+  - "deployment"
+  - "mbtaccess"
+  - "-p"
+  - "{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"rev\":\"$REVISION_ID\"}}}}}"

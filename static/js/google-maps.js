@@ -12,6 +12,20 @@ async function initMap () {
     const bounds = new google.maps.LatLngBounds()
     google.maps.event.addDomListener(window, 'resize', () => map.fitBounds(bounds))
     const infoWindow = new google.maps.InfoWindow()
+    const options = {
+      bounds: bounds,
+      placeIdOnly: true
+    }
+    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), options)
+    const geocoder = new google.maps.Geocoder()
+    const markersArray = []
+    const clearStops = () => {
+      markersArray.forEach(marker => marker.setMap(null))
+      const tableDiv = document.getElementById('stops-table')
+      while (tableDiv.firstChild) {
+        tableDiv.removeChild(tableDiv.firstChild)
+      }
+    }
     const showStops = async location => {
       // Create map marker and infoWindow at location
       let marker = new google.maps.Marker({
@@ -19,6 +33,7 @@ async function initMap () {
         position: location,
         label: '★'
       })
+      markersArray.push(marker)
       map.setCenter(location)
       infoWindow.setPosition(location)
       infoWindow.setContent(location.name)
@@ -53,7 +68,6 @@ async function initMap () {
         const tbody = document.createElement('tbody')
         table.appendChild(tbody)
         // Create markers, infoWindow content, and table rows for each stop
-        const markersArray = []
         stops.forEach((stop, i) => {
           // Set stop attributes
           let googleUrl = `https://www.google.com/maps/dir/?api=1&origin=${location.lat},${location.lng}&destination=${stop.latitude},${stop.longitude}&travelmode=walking`
@@ -98,13 +112,17 @@ async function initMap () {
           }
           stopRow.appendChild(stopRowName)
         })
-        console.log(`Stops:`, stops)
       } else {
         let message = 'No stops returned.'
         let stopsFail = document.createElement('div')
-        stopsFail.className = 'alert alert-danger'
+        stopsFail.className = 'alert alert-dismissable alert-danger fade show'
         stopsFail.role = 'alert'
-        stopsFail.textContent = message
+        stopsFail.innerHTML = `
+          ${message}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        `
         const parentDiv = document.querySelector('#map').parentNode
         const mapDiv = document.querySelector('#map')
         parentDiv.insertBefore(stopsFail, mapDiv)
@@ -118,14 +136,20 @@ async function initMap () {
         lng: position.coords.longitude,
         name: 'You'
       }
-      console.log(`Successfully geolocated user.\nGeolocation:`, position)
+      console.log('Successfully geolocated user.')
+      clearStops()
       showStops(location)
     }
     const failure = e => {
       let geoFail = document.createElement('div')
-      geoFail.className = 'alert alert-warning'
+      geoFail.className = 'alert alert-dismissable alert-warning fade show'
       geoFail.role = 'alert'
-      geoFail.innerHTML = `${e.message}`
+      geoFail.innerHTML = `
+        ${e.message}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      `
       const parentDiv = document.querySelector('#map').parentNode
       const mapDiv = document.querySelector('#map')
       parentDiv.insertBefore(geoFail, mapDiv)
@@ -145,12 +169,24 @@ async function initMap () {
       parentDiv.insertBefore(noGeo, mapDiv)
       console.log(message)
     }
-    /*
-    TODO: Search input from search box
-    document.querySelector('form').addEventListener('submit', event => {
-      // TODO: Maybe use Elasticsearch to return instant results as the user types
+    // Search input with Google Places Autocomplete
+    google.maps.event.addDomListener(autocomplete, 'place_changed', () => {
+      const selectedPlace = autocomplete.getPlace()
+      geocoder.geocode({'placeId': selectedPlace.place_id}, (results, status) => {
+        if (status === 'OK') {
+          let location = {
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng(),
+            name: selectedPlace.name.replace(/,.*/g, '')
+          }
+          clearStops()
+          console.log(`Searching for stops near ${selectedPlace.name}`)
+          showStops(location)
+        } else {
+          console.warn(`Geocoder issue: ${status}`)
+        }
+      })
     })
-   */
   } catch (e) {
     throw Error(e)
   }
