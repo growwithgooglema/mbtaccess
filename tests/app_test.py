@@ -68,10 +68,9 @@ class AppTest(unittest.TestCase):
         """Test the stops endpoint, which expects query strings."""
         endpoints = {
             '/stops?lat=42.35947&lon=-71.09296': 'good',
+            '/stops?lat=42.36947&lon=-71.08296': 'good',
             '/stops?lat=bad&lon=bad': 'bad',
-            '/stops?lat=420.35947&lon=-710.09296': 'bad',
-            '/stops?lat=42.35947&lon=-71.09296': 'good',
-            '/stops?lat=42.36947&lon=-71.08296': 'good'
+            '/stops?lat=420.35947&lon=-710.09296': 'bad'
         }
         for e, exp in endpoints.items():
             with self.subTest('Testing API endpoint {e}'.format(e=e), end=e, expect=exp):
