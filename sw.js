@@ -2,7 +2,6 @@
 /* eslint-env serviceworker */
 // Set up cache ID variable
 const cacheID = 'mbtaccess-v1'
-const key = 'AIzaSyBWOmSLQfhv8GKiS9qu8RW-5iM6T9sJrTY'
 
 // Install: Open a cache, cache files, return any errors
 self.addEventListener('install', event => {
