@@ -1,0 +1,87 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!-- About page -->
+  <div class="container">
+    <div class="row">
+      <div class="col-lg">
+        <h2 class="lead">About MBTAccess</h2>
+        <article>
+          <p>
+            <strong>The MBTAccess app locates wheelchair-accessible public transit stops near the user.</strong>
+            It integrates Application Programming Interfaces (APIs) from Google Maps and the Massachusetts Bay Transportation Authority (MBTA).
+          </p>
+          <p>
+            An API is a way for an application to provide data to other applications in a standardized format.
+            The MBTA <a href="https://medium.com/mbta-tech/introducing-the-v3-api-dce5bde105ea" target="_blank">introduced</a> a new <a href="https://api-v3.mbta.com/" target="_blank">MBTA V3 API</a> in November 2017. One of the under-utilized parts of their API is the wheelchair accessibility of the stops.
+          </p>
+          <div class="row py-2">
+            <div class="col-lg">
+              <p>
+                Google Maps <a href="http://fortune.com/2018/03/15/google-maps-wheelchair-accessible-routes/" target="_blank">started</a> providing wheelchair accessibility info for MBTA stops in March 2018, but the user experience is not ideal.
+                In the Google Maps native app, a user has to make at least three taps to see accessibility info on a single stop:
+              </p>
+              <ol>
+                <li>Tap on the transit tab.</li>
+                <li>Tap "More stations" to find a specific station.</li>
+                <li>Tap on a specific station</li>
+                <li>See a tiny wheelchair icon.</li>
+              </ol>
+              <p>
+                Searching isn't easy either.
+              </p>
+              <ul>
+                <li>Searching "wheelchair stop" returns a far-away parking lot as the top hit.</li>
+                <li>Searching "wheelchair t stop" returns some stops, but also wheelchair vendors, and doesn't display any accessibility icons.</li>
+                <li>Searching "wheelchair MBTA stop" shows some stops, but the search content is strangely different from the other screens.</li>
+              </ul>
+            </div>
+            <div class="col-lg">
+              <img src="static/img/mbtaccess-about-google-maps.png" alt="Steps for finding wheelchair-accessible MBTA stops with Google Maps" class="img-fluid">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p>
+                Other apps aren't much better. The Citymapper native app doesn't provide any wheelchair accessibility info at all.
+              </p>
+              <p>
+                MBTAccess provides an experience tailored to users in wheelchairs.
+                Simply providing the location to the web browser returns stops within half a mile.
+                Clicking a map marker opens a window with the stop name and a link to directions in Google Maps.
+              </p>
+              <p>
+                There's also a page with information on universities in the Massachusetts Bay area.
+              </p>
+              <p>
+                We don't store or sell information on the app's users.
+                When the user clicks the Google Maps link, our app only sends the latitude/longitude coordinates to Google.
+              </p>
+              <p>
+                We hope this app is helpful.
+                We also realize that separate is not equal, as accessibility experts <a href="https://www.gcppodcast.com/post/episode-141-accessibility-in-tech/" target="_blank">explain</a>.
+                We hope that transportation apps like Google Maps will build these features into their apps.
+              </p>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg">
+        <h2 class="lead">About the developers</h2>
+        <p>
+          We're a group of web developers in the Boston-Cambridge area.
+          We met through a <a href="https://grow.google/" target="_blank">Grow with Google</a> scholarship program.
+          We open-source our code on <a href="https://github.com/growwithgooglema/mbtaccess">GitHub</a>.
+        </p>
+        <p>Contact us: gwgnewengland {at} gmail.com</p>
+      </div>
+      <div class="col-lg">
+        <img src="static/img/mbtaccess-meetup-20180407-mit.jpg" alt="MBTAccess team meetup photo from April 7, 2018 at MIT" class="img-fluid">
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block script %}
+  <script defer src="static/js/about.js"></script>
+{% endblock %}

@@ -1,16 +1,7 @@
-header {
-  font-family: Roboto;
-}
 html, body {
   height: 100%;
 }
 #map {
-  height: 90%;
-  margin: auto;
-}
-.center {
-  margin: auto;
-  width: 80%;
-  padding: 0px;
-  border: 0px;
+  height: 100%;
+  box-sizing: content-box;
 }

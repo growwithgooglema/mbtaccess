@@ -1,0 +1,32 @@
+{
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  // JavaScript
+  "eslint.enable": false,
+  "jshint.enable" : false,
+  "standard.enable": true,
+  "standard.autoFixOnSave": true,
+  // Python
+  "[python]": {
+    "editor.formatOnPaste": false,
+    "editor.formatOnSave": true,
+    "editor.rulers": [100],
+    "editor.tabSize": 4
+  },
+  "python.formatting.autopep8Args": [
+    "--max-line-length",
+    "100"
+  ],
+  "python.formatting.provider": "autopep8",
+  "python.linting.pylintEnabled": false,
+  "python.pythonPath": "${workspaceFolder}/venv/bin/python",
+  "python.unitTest.unittestEnabled": true,
+  "python.unitTest.autoTestDiscoverOnSaveEnabled": true,
+  "python.unitTest.unittestArgs": [
+    "-vv",
+    "-s",
+    "tests",
+    "-p",
+    "*test*.py"
+  ]
+}

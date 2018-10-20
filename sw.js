@@ -1,86 +1,93 @@
-// Service worker script
-// Cache static files and images
-// Cache GET and POST requests, especially API calls
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MBTAccess Service Worker ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+/* eslint-env serviceworker */
+// Set up cache ID variable
+const cacheID = 'mbtaccess-v1'
 
-var cacheName = 'gwg-mbta-v12';
-var key = "AIzaSyBkvLRF67g3vk9YnX_rNjErv3UTdJhqdmQ";
-var staticScripts = [
-  "https://code.jquery.com/jquery-3.2.1.slim.min.js",
-  "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js",
-  "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js",
-  "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css",
-  "https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css",
-  "https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js",
-  "https://cdn.datatables.net/responsive/2.2.1/css/responsive.dataTables.min.css",
-  "https://cdn.datatables.net/responsive/2.2.1/js/dataTables.responsive.min.js",
-  "https://api-v3.mbta.com/stops",
-  "data/cleaner_universities.json",
-  "index.html",
-  "static/js/index.js",
-  "static/js/dbCaching.js",
-  "static/js/localforage.min.js",
-  "static/js/utilities.js"
-];
-
-self.addEventListener('fetch', function(event) {
-  var requestUrl = event.request.url;
-  var responseCaches = !requestUrl.includes('datatables') && !requestUrl.includes('maps') && !requestUrl.includes(key) && !requestUrl.includes('fonts.googleapis');
-  if (responseCaches) {
-    // console.log(event.request.url);
-    event.respondWith(caches.open(cacheName).then(function(cache) {
-      return cache.match(event.request).then(function(response) {
-        if (response) {
-          return response;
-        }
-        return fetch(event.request).then(function(response) {
-          if (!response.ok) throw Error(response.statusText);
-          return response;
-        }).then(function(response) {
-          var toCache = response.clone();
-          cache.put(event.request, toCache);
-          return response;
-        }).catch(function(error) {
-          console.log(`Encountered: ${error.message}.`);
-        });
-      });
-    }));
-    return;
-  }
-});
-
-// Cache static stuff during install
-self.addEventListener('install', function (event) {
-  event.waitUntil(
-    caches.open(cacheName).then(function (cache) {
-      var staticRequests = staticScripts.map(function(script) {
-        return new Request(script, {mode: 'no-cors'});
-      });
-      return cache.addAll(staticScripts);
+// Install: Open a cache, cache files, return any errors
+self.addEventListener('install', event => {
+  const filesToCache = [
+    '/',
+    '/about',
+    '/universities',
+    'https://code.jquery.com/jquery-3.3.1.slim.min.js',
+    'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js',
+    'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js',
+    'https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css',
+    'static/css/custom.css',
+    'static/img/favicon.ico',
+    'static/img/mbtaccess-about-google-maps.png',
+    'static/img/mbtaccess-meetup-20180407-mit.jpg',
+    'static/js/about.js',
+    'static/js/date.js',
+    'static/js/google-maps.js',
+    'static/js/sw-install.js',
+    'static/js/universities.js'
+  ]
+  console.log('Installing Service Worker and caching static assets')
+  event.waitUntil(caches.open(cacheID).then(cache => {
+    return cache.addAll(filesToCache).catch(error => {
+      console.log(`Caching failed: ${error}.`)
     })
-  );
-});
+  }))
+})
+
+// Fetch: Intercept network fetch request and return resources from cache
+self.addEventListener('fetch', event => {
+  let cacheRequest = event.request
+  let cacheUrlObj = new URL(event.request.url)
+  if (cacheUrlObj.hostname !== 'localhost') {
+    event.request.mode = 'no-cors'
+  }
+  if (event.request.url.indexOf('index.html') > -1) {
+    const cacheURL = '/'
+    cacheRequest = new Request(cacheURL)
+  }
+  if (event.request.url.indexOf('about.html') > -1) {
+    const cacheURL = '/about'
+    cacheRequest = new Request(cacheURL)
+  }
+  if (event.request.url.indexOf('universities.html') > -1) {
+    const cacheURL = '/universities'
+    cacheRequest = new Request(cacheURL)
+  }
+  event.respondWith(caches.match(cacheRequest)
+    .then(response => {
+      return (response || fetch(event.request).then(fetchResponse => {
+        return caches.open(cacheID)
+          .then(cache => {
+            cache.put(event.request, fetchResponse.clone())
+            return fetchResponse
+          })
+      }).catch(error => {
+        throw (error)
+      })
+      )
+    })
+  )
+})
 
 // Get and handle messages from clients
-self.addEventListener('message', function (event) {
+self.addEventListener('message', event => {
   if (event.data.action === 'skipWaiting') {
-    self.skipWaiting();
+    self.skipWaiting()
   }
-});
+})
 
-self.addEventListener('activate', function (event) {
+// Update cache
+self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(function (cacheNames) {
+    caches.keys().then(cacheIDs => {
       return Promise.all(
-        cacheNames.filter(function (cache) {
-          return cache.startsWith('gwg-mbta-') && cache != cacheName;
-        }).map(function (cache) {
-          return caches.delete(cache).then(function () {
-            console.log('Old cache deleted');
-          }).catch(function () {
-            console.log('Failed to get rid of old cache');
-          });
+        cacheIDs.filter(cache => {
+          return cache.startsWith('mbtaccess-') && cache !== cacheID
+        }).map(cache => {
+          return caches.delete(cache).then(() => {
+            console.log('Old cache deleted')
+          }).catch(() => {
+            console.log('Failed to get rid of old cache')
+          })
         })
-      );
+      )
     })
-  );
-});
+  )
+})

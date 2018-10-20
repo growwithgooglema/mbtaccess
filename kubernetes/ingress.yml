@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: mbtaccess-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: mbtaccess-global-ip
+  labels:
+    app: mbtaccess
+spec:
+  backend:
+    serviceName: mbtaccess-load-balancer
+    servicePort: 80
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mbtaccess-load-balancer
+spec:
+  selector:
+    app: mbtaccess
+  ports:
+  - port: 80
+    targetPort: 80
+  type: LoadBalancer
+  loadBalancerIP: 35.186.205.246

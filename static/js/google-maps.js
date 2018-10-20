@@ -1,238 +1,193 @@
-// Google maps code to generate a map and populate it with
-// info related to the end user's requested location
-
-class Place {
-  constructor({name="Your Current Location", formatted_address="", lat=null, lng=null, wheelchair_accessible=0} = {}) {
-    this.name = name;
-    this.formatted_address = formatted_address;
-    this.wheelchair_accessible = wheelchair_accessible;
-    this.geometry = {
-      location: {
-        lat: function() {
-          return lat;
-        },
-        lng: function() {
-          return lng;
-        }
-      }
-    };
-  }
-}
-var userLocation = new Place({name: 'Your Current Location'});
-var map;  // Main map
-var markers = [];  // Generated markers; every marker generated is added here
-var infoClosed = false;  // Keeps track of whether or not an infoWindow has been closed
-var currentlyOpened = false; // Keeps track of whether or not an infoWindow is currently opened
-var stops = [];
-
-function initMap() {
-  // Function called when navigator.geolocation.getCurrentPosition fails
-  function error(err) {
-    console.warn(`ERROR(${err.code}): ${err.message}`);
-  }
-  // Function called when navigator.geolocation.getCurrentPosition succeeds
-  function success(position) {
-    var coords = position.coords;
-    userLocation = new Place({lat: coords.latitude, lng: coords.longitude});
-    // userLocation.geometry.location.lat = function() {
-    //   return coords.latitude;
-    // };
-    // userLocation.geometry.location.lng = function() {
-    //   return coords.longitude;
-    // };
-    if (markers.length === 0) {
-      map.setCenter(new google.maps.LatLng(coords.latitude, coords.longitude));
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ MBTAccess map ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
+async function initMap () {
+  try {
+    let navLink = document.getElementById('nav-link-index')
+    navLink.className = 'nav-link active'
+    // Initialize Google Map
+    const boston = {lat: 42.360091, lng: -71.09416}
+    const map = new google.maps.Map(document.getElementById('map'), {
+      center: boston,
+      zoom: 13
+    })
+    const bounds = new google.maps.LatLngBounds()
+    google.maps.event.addDomListener(window, 'resize', () => map.fitBounds(bounds))
+    const infoWindow = new google.maps.InfoWindow()
+    const options = {
+      bounds: bounds,
+      placeIdOnly: true
     }
-    // makeMarkers(userLocation);
-    console.log('Successfully obtained user geolocation data.');
-  }
-  // Try getting the user's current geolocation information
-  navigator.geolocation.getCurrentPosition(success, error);
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: new google.maps.LatLng(42.360091,-71.09416),
-    zoom: 13
-  });
-  var mapCenter;
-  if (userLocation.geometry.location.lat() && userLocation.geometry.location.lng()) {
-    mapCenter = new google.maps.LatLng(
-      userLocation.geometry.location.lat(),
-      userLocation.geometry.location.lng()
-    );
-  } else {
-    mapCenter = new google.maps.LatLng(42.360091,-71.09416);
-  }
-  // Force set center of the map again
-  map.setCenter(mapCenter);
-
-  // Convenient function to generate markers and place them on the map
-  function makeMarkers(place) {
-    var bounds = new google.maps.LatLngBounds();
-    // 1 mile is 1.609344 kilometers
-    var largeInfowindow = new google.maps.InfoWindow();
-    var lat = place.geometry.location.lat();  // latitude from the place service
-    var lng = place.geometry.location.lng();  // longitude from the place service
-    var address = place.formatted_address;   // name of the place from the place service
-    var name = place.name;
-    var stopCounter = 0;
-    var wheelchairCounter = 0;
-    // Use localforage to iterate through the cached stops.
-    // Grab each value and check if the location is within our expected radius.
-    // If so, make a Place object and a marker for it. Then add the marker to the map.
-    // Add an event listener to the generated marker to open the large info window
-    // with the right information
-    localforage.iterate(function(value, key, IterNumber) {
-      // Check radius condition
-      // Make Place object and marker
-      // Add event listeners
-      var p1 = {lat: lat, lon: lng};
-      var p2 = {lat: value.lat, lon: value.lng};
-      var distance = getDistanceBetweenTwoPoints(p1, p2);
-      if (distance <= (1.609344/2)) {
-        stopCounter += 1;
-        var stop = new Place({
-          name: value.name,
-          lat: value.lat,
-          lng: value.lng,
-          wheelchair_accessible: value.wheelchair_boarding,
-          formatted_address: `${distance.toFixed(2)} mile from ${place.name}`
-        });
-        if (value.wheelchair_boarding > 0) {
-          wheelchairCounter += 1;
-          stop.message = "Wheelchair Accessible";
-        } else {
-          stop.message = "Not Wheelchair Accessible";
-        }
-        stops.push(stop);
-        var marker = new google.maps.Marker({
-          map: map,
-          position: new google.maps.LatLng(stop.geometry.location.lat(), stop.geometry.location.lng()),
-          title: `<p>${stop.name}</p><p>${stop.formatted_address}</p><p>${stop.message}</p>`,
-          animation: google.maps.Animation.DROP
-        });
-        markers.push(marker);
-        bounds.extend(new google.maps.LatLng(lat, lng));
-        marker.addListener('click', function() {
-          if (infoClosed) {
-            largeInfowindow.setContent(`<div>${marker.title}</div>`);
-            largeInfowindow.open(map, marker);
-            currentlyOpened = true;
+    const autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'), options)
+    const geocoder = new google.maps.Geocoder()
+    const markersArray = []
+    const clearStops = () => {
+      markersArray.forEach(marker => marker.setMap(null))
+      const tableDiv = document.getElementById('stops-table')
+      while (tableDiv.firstChild) {
+        tableDiv.removeChild(tableDiv.firstChild)
+      }
+    }
+    const showStops = async location => {
+      // Create map marker and infoWindow at location
+      let marker = new google.maps.Marker({
+        map: map,
+        position: location,
+        label: '★'
+      })
+      markersArray.push(marker)
+      map.setCenter(location)
+      infoWindow.setPosition(location)
+      infoWindow.setContent(location.name)
+      infoWindow.open(map, marker)
+      // Fetch stops near location from database
+      const query = fetch(`stops?lat=${location.lat}&lon=${location.lng}`)
+      const data = await (await query).json()
+      const stops = data.stops
+      if (stops.length !== 0) {
+        // Create table that will be populated with stops
+        const tableDiv = document.getElementById('stops-table')
+        const tableTitle = document.createElement('h2')
+        tableTitle.className = 'lead'
+        tableTitle.textContent = 'Stop list'
+        tableDiv.appendChild(tableTitle)
+        const table = document.createElement('table')
+        table.className = 'table table-sm table-striped'
+        tableDiv.appendChild(table)
+        const thead = document.createElement('thead')
+        thead.className = 'thead-light'
+        table.appendChild(thead)
+        const theadRow = document.createElement('tr')
+        thead.appendChild(theadRow)
+        const thNum = document.createElement('th')
+        thNum.textContent = '#'
+        thNum.scope = 'col'
+        theadRow.appendChild(thNum)
+        const thName = document.createElement('th')
+        thName.textContent = 'Name'
+        thName.scope = 'col'
+        theadRow.appendChild(thName)
+        const tbody = document.createElement('tbody')
+        table.appendChild(tbody)
+        // Create markers, infoWindow content, and table rows for each stop
+        stops.forEach((stop, i) => {
+          // Set stop attributes
+          let googleUrl = `https://www.google.com/maps/dir/?api=1&origin=${location.lat},${location.lng}&destination=${stop.latitude},${stop.longitude}&travelmode=walking`
+          let stopLocation = {lat: stop.latitude, lng: stop.longitude}
+          let number = `${i + 1}`
+          let name = stop.name
+          // Create markers
+          let marker = new google.maps.Marker({
+            map: map,
+            position: stopLocation,
+            animation: google.maps.Animation.DROP
+          })
+          // Set infoWindow content
+          marker.addListener('click', () => {
+            marker.setAnimation(google.maps.Animation.BOUNCE)
+            setTimeout(() => marker.setAnimation(null), 1000)
+            infoWindow.setContent(
+              `<div id="info-window-content">
+                <header>
+                  <strong>${number}. ${name}</strong>
+                </header>
+                <div><a href="${googleUrl}" target="_blank">View on Google Maps</a></div>
+              </div>`)
+            infoWindow.open(map, marker)
+          })
+          markersArray.push(marker)
+          // Adjust map to fit markers
+          bounds.extend(marker.position)
+          map.fitBounds(bounds)
+          // Fill table with stop data
+          let stopRow = document.createElement('tr')
+          tbody.appendChild(stopRow)
+          let stopRowNum = document.createElement('th')
+          stopRowNum.scope = 'row'
+          stopRowNum.textContent = number
+          stopRow.appendChild(stopRowNum)
+          let stopRowName = document.createElement('td')
+          if (stop.platform_name) {
+            stopRowName.innerHTML = `<a href="${googleUrl}" target="_blank">${name}</a><p>${stop.platform_name}</p>`
           } else {
-            populateInfoWindow(this, largeInfowindow);
+            stopRowName.innerHTML = `<a href="${googleUrl}" target="_blank">${name}</a>`
           }
-        });
+          stopRow.appendChild(stopRowName)
+        })
+      } else {
+        let message = 'No stops returned.'
+        let stopsFail = document.createElement('div')
+        stopsFail.className = 'alert alert-dismissable alert-danger fade show'
+        stopsFail.role = 'alert'
+        stopsFail.innerHTML = `
+          ${message}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        `
+        const parentDiv = document.querySelector('#map').parentNode
+        const mapDiv = document.querySelector('#map')
+        parentDiv.insertBefore(stopsFail, mapDiv)
+        console.log(message)
       }
-    }).then(function() {
-      // Recenter the map
-      // Generate a div below the map with the number of stops found
-      // Add info wheelchair accessibility
-      map.setCenter(bounds.getCenter());
-      console.log(`Number of stops: ${stopCounter}; Wheelchairs: ${wheelchairCounter}.`);
-      // map.fitBounds(bounds);
-      $("#stops").DataTable({
-        data: stops.map(function(stop) {
-          var lat = stop.geometry.location.lat();
-          var lng = stop.geometry.location.lng();
-          var directionLink = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=walking`;
-          return [
-            `<a href="${directionLink}" target="_blank">${stop.name}</a>`,
-            stop.formatted_address,
-            stop.message
-          ];
-        }),
-        columns: [
-          {title: "Stop"},
-          {title: "Distance"},
-          {title: "Accessibility"}
-        ],
-        responsive: true,
-        destroy: true
-      });
-    }).catch(function(error) {
-      console.log('An error occurred...');
-      console.log(error);
-    });
-  }
-  // A callback to handle the received response from Google maps' text search service
-  function callback(results, status) {
-    // console.log(results[0])
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      makeMarkers(results[0]);
-    } else {
-      alert('Could not find any information about your search term.');
-      return;
     }
-  }
-  // A function to search for a place's geolocation info from text
-  function pinPlace(searchText) {
-    var service = new google.maps.places.PlacesService(map);
-    var request = {
-      query: searchText.toLowerCase(),
-      location: mapCenter,
-      radius: '50000'
-    };
-    service.textSearch(request, callback);
-  }
-  // Main function that populates an info window and places it on the map
-  function populateInfoWindow(marker, infowindow) {
-    if (infowindow.marker != marker) {
-      infowindow.marker = marker;
-      infowindow.setContent(`<div>${marker.title}</div>`);
-      infowindow.open(map, marker);
-      currentlyOpened = true;
-      infowindow.addListener('closeclick', function() {
-        infowindow.setMarker = null;
-        infoClosed = true;
-        currentlyOpened = false;
-      });
-    }
-  }
-  // Convenient function to hide markers from the map
-  function hideMarkers() {
-    for (let i=0; i<markers.length; i++) {
-      markers[i].setMap(null);
-    }
-    markers = [];
-    stops = [];
-  }
-  // An event handler that grabs the submitted search text and passes it to pinPlace
-  document.querySelector("form").addEventListener('submit', function(event) {
-    event.preventDefault();
-    hideMarkers();
-    // map.setZoom(13);
-    var searchText = document.querySelector("#searchtxt").value;
-    if (searchText === "" || !searchText) {
-      // alert("Cannot submit form with empty search text.");
-      // return;
-      if (!userLocation.geometry.location.lat() && !userLocation.geometry.location.lng()) {
-        alert("The application is probably busy retrieving your current location. Please try again later.");
-        return;
+    // Handle geolocation success and failure
+    const success = position => {
+      let location = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        name: 'You'
       }
-      makeMarkers(userLocation);
-    } else {
-      pinPlace(searchText);
+      console.log('Successfully geolocated user.')
+      clearStops()
+      showStops(location)
     }
-  });
-  // map.fitBounds(bounds);
+    const failure = e => {
+      let geoFail = document.createElement('div')
+      geoFail.className = 'alert alert-dismissable alert-warning fade show'
+      geoFail.role = 'alert'
+      geoFail.innerHTML = `
+        ${e.message}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      `
+      const parentDiv = document.querySelector('#map').parentNode
+      const mapDiv = document.querySelector('#map')
+      parentDiv.insertBefore(geoFail, mapDiv)
+      console.warn(`ERROR (${e.code}): ${e.message}`)
+    }
+    // Geolocate user
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(success, failure)
+    } else {
+      let message = 'Geolocation not available in browser.'
+      let noGeo = document.createElement('div')
+      noGeo.className = 'alert alert-danger'
+      noGeo.role = 'alert'
+      noGeo.textContent = message
+      const parentDiv = document.querySelector('#map').parentNode
+      const mapDiv = document.querySelector('#map')
+      parentDiv.insertBefore(noGeo, mapDiv)
+      console.log(message)
+    }
+    // Search input with Google Places Autocomplete
+    google.maps.event.addDomListener(autocomplete, 'place_changed', () => {
+      const selectedPlace = autocomplete.getPlace()
+      geocoder.geocode({'placeId': selectedPlace.place_id}, (results, status) => {
+        if (status === 'OK') {
+          let location = {
+            lat: results[0].geometry.location.lat(),
+            lng: results[0].geometry.location.lng(),
+            name: selectedPlace.name.replace(/,.*/g, '')
+          }
+          clearStops()
+          console.log(`Searching for stops near ${selectedPlace.name}`)
+          showStops(location)
+        } else {
+          console.warn(`Geocoder issue: ${status}`)
+        }
+      })
+    })
+  } catch (e) {
+    throw Error(e)
+  }
 }
-
-// The following has nothing to do with the map above.
-// It's all JQuery code that handles some click events.
-// There is also a snippet that takes care of updating
-// the year in the footer
-// Initialize tooltip component
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-});
-// Initialize popover component
-$(function () {
-  $('[data-toggle="popover"]').popover();
-});
-$('a.nav-link').on('click', function() {
-  var link = $(this);
-  $('a.nav-link.active').removeClass('active');
-  $('li.nav-item.active').removeClass('active');
-  $(link).addClass('active');
-});
-// Calculate current year for footer
-var currentYear = new Date().getFullYear();
-$("#copyright").html(`&copy; ${currentYear}`);

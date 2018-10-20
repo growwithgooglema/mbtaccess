@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: mbtaccess-latest
+    track: canary
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mbtaccess-latest
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: mbtaccess-latest
+    spec:
+      containers:
+      - image: gcr.io/mbtaccess/web:latest
+        imagePullPolicy: Always
+        name: web
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30

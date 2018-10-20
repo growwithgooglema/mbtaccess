@@ -1,0 +1,10 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - 80:80
+  search:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.0
+  # tasks:
+    # command:
