@@ -204,21 +204,22 @@ docker-compose up -d
 
 ### Deployment
 
-- The app is deployed with Google Cloud Platform (GCP) Kubernetes Engine.
+- The app is deployed with Google Cloud Platform (GCP).
 - [Cloud Build](https://cloud.google.com/cloud-build/) reads the _cloudbuild.yml_ files and builds a Docker container from the GitHub repository each time a commit is pushed.
 - Containers built with Cloud Build are stored in the GCP [Container Registry](https://cloud.google.com/container-registry/) (similar to Docker Cloud/Docker Store).
-- Google Cloud Platform has three [options for Python apps](https://cloud.google.com/python/). We use [Kubernetes Engine](https://cloud.google.com/kubernetes-engine/). [Kubernetes](https://kubernetes.io) (Greek for 'helmsman') is an open-source container management system.
+- Google Cloud Platform has three [options for Python apps](https://cloud.google.com/python/).
+- We first tried using [Kubernetes Engine](https://cloud.google.com/kubernetes-engine/). [Kubernetes](https://kubernetes.io) (Greek for 'helmsman') is an open-source container management system.
   - The Docker container for our app is considered a [pod](https://cloud.google.com/kubernetes-engine/docs/concepts/pod).
   - The pod is deployed as a workload on Kubernetes Engine. [Horizontal pod autoscaling](https://cloud.google.com/kubernetes-engine/docs/how-to/scaling-apps) adjusts the number of pod replicas based on traffic.
   - The deployment is configured for [rolling updates](https://cloud.google.com/kubernetes-engine/docs/how-to/updating-apps) and `imagePullPolicy: Always`.
   - Cloud Build triggers automatic updates to the Kubernetes deployment with an annotation patch in the _cloudbuild.yml_ files. We use the `$REVISION_ID` [default variable substitution](https://cloud.google.com/cloud-build/docs/configuring-builds/substitute-variable-values), but a [timestamp annotation](https://github.com/kubernetes/kubernetes/issues/27081#issuecomment-327321981) can also be used.
+- The Kubernetes setup was about \$100 month, so we switched to the ["free tier"](https://cloud.google.com/free/docs/gcp-free-tier) base-level single VM (which is actually not free).
 
 ### Networking
 
 - The domain name mbtaccess.org was purchased through [Hover](https://www.hover.com/).
 - The domain name directs web traffic to [Cloudflare](https://www.cloudflare.com/) nameservers for security.
-- Cloudflare sends traffic to GCP with DNS A records that point to a [static IP address](https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip).
-- The static IP address passes network requests to the Kubernetes cluster with a [Kubernetes ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) and load balancer service.
+- Cloudflare sends traffic to GCP with DNS A records that point to a [static IP address](https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip). When we were using Kubernetes, the static IP address passed network requests to the Kubernetes cluster with a [Kubernetes ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) and load balancer service.
 - The Google Maps JavaScript API requires the API key to be embedded in the source code. The API key only accepts network requests from the Geocoding, Maps and Places APIs and the following HTTP referrers:
   - `http://localhost/*`
   - `https://growwithgooglema.github.io/mbtaccess/*`
