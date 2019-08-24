@@ -107,10 +107,12 @@ class Stop(db.Model):
         output = []
         stops = get_stops(url)
         for stop in stops:
-            d = {'stop_id': stop.get('id')}
-            for k, v in stop.get('attributes').items():
-                d[k] = v
-            output.append(cls(**d))
+            if stop['attributes']['latitude'] and stop['attributes']['longitude']:
+                if stop['attributes']['location_type'] != 3:
+                    d = {'stop_id': stop.get('id')}
+                    for k, v in stop.get('attributes').items():
+                        d[k] = v
+                    output.append(cls(**d))
         return output
 
     def serialize(self):
