@@ -24,7 +24,10 @@ def main():
     app.app_context().push()
     db.drop_all()
     db.create_all()
-    all_stops = Stop.from_api('https://api-v3.mbta.com/stops')
+    columns = [column.name for column in Stop.__table__.columns]
+    url = f'https://api-v3.mbta.com/stops?fields[stop]={columns}'.replace(
+        "'", "").replace(' ', '').replace('=[', '=').replace('stop_id', 'id').strip(']')
+    all_stops = Stop.from_api(url)
     db.session.bulk_save_objects(all_stops)
     db.session.commit()
     print('Done loading data')
