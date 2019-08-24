@@ -13,6 +13,7 @@
 - [Application stack](#application-stack)
   - [Flask](#flask)
   - [Testing](#testing)
+  - [Debugging](#debugging)
   - [Front-end](#front-end)
   - [Docker](#docker)
   - [Deployment](#deployment)
@@ -118,6 +119,10 @@ The Flask application should run within a virtual environment. Python 3 is bundl
 
 - Tests are run automatically on the GitHub repo by Continuous Integration (CI).
 - We use [Travis CI](https://travis-ci.org). Build information is available on the [MBTAccess Travis CI page](https://travis-ci.org/growwithgooglema/mbtaccess).
+
+### Debugging
+
+Two [VSCode debug configurations](https://code.visualstudio.com/docs/python/debugging) are provided: one for debugging the database migration, and one for running the Flask app.
 
 ### Front-end
 
